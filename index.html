@@ -3,750 +3,777 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meta Ads 電商銷售漏斗計算器</title>
+<title>Meta Ads 銷售漏斗計算器</title>
 <style>
-  :root {
-    --primary: #0866FF;
-    --primary-dark: #0552cc;
-    --success: #00c851;
-    --warning: #ffbb33;
-    --danger: #ff4444;
-    --bg: #0a0e1a;
-    --surface: #111827;
-    --surface2: #1a2236;
-    --border: #2a3550;
-    --text: #e8eaf6;
-    --text-muted: #8892b0;
-    --accent: #64ffda;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 24px 16px;
-  }
-  .container { max-width: 1200px; margin: 0 auto; }
-  h1 {
-    text-align: center;
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 4px;
-    background: linear-gradient(135deg, #0866FF, #64ffda);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .subtitle { text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 32px; }
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-  @media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+:root {
+  --primary: #0866FF;
+  --success: #00c851;
+  --warning: #ffbb33;
+  --danger: #ff4444;
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --surface2: #1a2236;
+  --border: #2a3550;
+  --text: #e8eaf6;
+  --muted: #8892b0;
+  --accent: #64ffda;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 24px 16px; }
+.container { max-width: 1100px; margin: 0 auto; }
 
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px;
-  }
-  .card-title {
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .card-title .icon { font-size: 1rem; }
+/* Header */
+h1 { text-align: center; font-size: 1.7rem; font-weight: 700; background: linear-gradient(135deg, #0866FF, #64ffda); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
+.subtitle { text-align: center; color: var(--muted); font-size: 0.85rem; margin-bottom: 24px; }
 
-  .input-group { margin-bottom: 14px; }
-  .input-group label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.83rem;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-  }
-  .benchmark-tag {
-    font-size: 0.7rem;
-    background: rgba(8,102,255,0.15);
-    color: #6699ff;
-    padding: 2px 6px;
-    border-radius: 4px;
-    border: 1px solid rgba(8,102,255,0.3);
-  }
-  .input-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 0 12px;
-    transition: border-color 0.2s;
-  }
-  .input-row:focus-within { border-color: var(--primary); }
-  .input-row input[type="number"] {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--text);
-    font-size: 0.95rem;
-    padding: 10px 0;
-    width: 100%;
-  }
-  .input-row input[type="range"] {
-    flex: 1;
-    accent-color: var(--primary);
-    cursor: pointer;
-  }
-  .unit { color: var(--text-muted); font-size: 0.85rem; min-width: 24px; text-align: right; }
-  .value-display {
-    font-size: 0.9rem;
-    color: var(--accent);
-    font-weight: 600;
-    min-width: 48px;
-    text-align: right;
-  }
+/* Mode toggle */
+.mode-toggle { display: flex; gap: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 4px; max-width: 400px; margin: 0 auto 28px; }
+.mode-btn { flex: 1; padding: 9px 12px; border: none; border-radius: 7px; background: transparent; color: var(--muted); font-size: 0.85rem; cursor: pointer; transition: all 0.2s; font-weight: 500; }
+.mode-btn.active { background: var(--primary); color: #fff; font-weight: 600; }
 
-  /* Funnel */
-  .funnel-wrap { position: relative; }
-  .funnel-step {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 6px;
-  }
-  .funnel-bar-wrap { flex: 1; }
-  .funnel-label { font-size: 0.78rem; color: var(--text-muted); min-width: 90px; }
-  .funnel-bar {
-    height: 32px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    padding: 0 10px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #fff;
-    transition: width 0.5s ease;
-    min-width: 40px;
-    position: relative;
-    overflow: hidden;
-  }
-  .funnel-bar::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 40%;
-    background: rgba(255,255,255,0.1);
-    border-radius: 6px 6px 0 0;
-  }
-  .funnel-num {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    min-width: 70px;
-    text-align: right;
-  }
-  .funnel-arrow {
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 0.72rem;
-    margin: 2px 0 2px 102px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .funnel-arrow span { color: var(--primary); font-weight: 600; }
+/* Layout */
+.layout { display: grid; grid-template-columns: 420px 1fr; gap: 20px; }
+@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
 
-  /* KPI Cards */
-  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
-  @media (max-width: 768px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
-  .kpi-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
-    text-align: center;
-  }
-  .kpi-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
-  .kpi-value { font-size: 1.6rem; font-weight: 700; line-height: 1; }
-  .kpi-sub { font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; }
-  .kpi-good { color: var(--accent); }
-  .kpi-warn { color: var(--warning); }
-  .kpi-bad { color: var(--danger); }
-  .kpi-blue { color: #6699ff; }
+/* Cards */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+.card-title { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.card-title .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+.card-title .dot.green { background: var(--accent); }
+.card-title .dot.yellow { background: var(--warning); }
 
-  /* ROAS gauge */
-  .roas-gauge { text-align: center; padding: 16px 0; }
-  .gauge-svg { width: 160px; height: 90px; }
-  .roas-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+/* Input fields */
+.field { margin-bottom: 12px; }
+.field-label { font-size: 0.8rem; color: var(--muted); margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+.field-hint { font-size: 0.7rem; background: rgba(8,102,255,0.12); color: #6699ff; border: 1px solid rgba(8,102,255,0.25); padding: 1px 6px; border-radius: 4px; }
+.field-hint.green { background: rgba(100,255,218,0.1); color: var(--accent); border-color: rgba(100,255,218,0.25); }
+.input-wrap { display: flex; align-items: center; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 0 12px; transition: border-color 0.2s; }
+.input-wrap:focus-within { border-color: var(--primary); }
+.input-wrap input { flex: 1; background: transparent; border: none; outline: none; color: var(--text); font-size: 0.95rem; padding: 10px 0; width: 100%; }
+.input-wrap input::-webkit-inner-spin-button { display: none; }
+.unit { color: var(--muted); font-size: 0.82rem; }
 
-  /* Scenarios */
-  .scenario-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  @media (max-width: 768px) { .scenario-grid { grid-template-columns: 1fr; } }
-  .scenario-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .scenario-card:hover { border-color: var(--primary); transform: translateY(-2px); }
-  .scenario-card.active { border-color: var(--accent); background: rgba(100,255,218,0.05); }
-  .scenario-name { font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; }
-  .scenario-metric { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; }
-  .scenario-metric span:last-child { color: var(--text); font-weight: 500; }
-  .scenario-roas { font-size: 1.2rem; font-weight: 700; color: var(--accent); margin-top: 8px; }
+/* Auto-computed metrics */
+.auto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.auto-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 9px; padding: 12px 14px; }
+.auto-label { font-size: 0.7rem; color: var(--muted); margin-bottom: 4px; }
+.auto-value { font-size: 1.25rem; font-weight: 700; color: var(--accent); }
+.auto-value.blue { color: #6699ff; }
+.auto-value.warn { color: var(--warning); }
+.auto-value.danger { color: var(--danger); }
+.auto-sub { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
 
-  /* Tabs */
-  .tab-bar { display: flex; gap: 4px; margin-bottom: 16px; background: var(--surface2); padding: 4px; border-radius: 8px; }
-  .tab-btn {
-    flex: 1; padding: 8px; border: none; border-radius: 6px;
-    background: transparent; color: var(--text-muted);
-    font-size: 0.82rem; cursor: pointer; transition: all 0.2s;
-  }
-  .tab-btn.active { background: var(--primary); color: #fff; font-weight: 600; }
+/* Separator */
+.sep { height: 1px; background: var(--border); margin: 16px 0; }
 
-  /* Breakeven table */
-  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-  th { color: var(--text-muted); font-weight: 500; padding: 8px 10px; text-align: right; border-bottom: 1px solid var(--border); }
-  th:first-child { text-align: left; }
-  td { padding: 8px 10px; text-align: right; border-bottom: 1px solid rgba(42,53,80,0.5); }
-  td:first-child { text-align: left; color: var(--text-muted); }
-  tr.highlight td { color: var(--accent); font-weight: 600; }
-  tr:hover td { background: rgba(8,102,255,0.05); }
+/* Funnel */
+.funnel-step { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.funnel-label { font-size: 0.75rem; color: var(--muted); width: 100px; flex-shrink: 0; }
+.funnel-bar-wrap { flex: 1; }
+.funnel-bar { height: 30px; border-radius: 6px; display: flex; align-items: center; padding: 0 10px; font-size: 0.78rem; font-weight: 600; color: #fff; transition: width 0.6s ease; min-width: 36px; position: relative; overflow: hidden; }
+.funnel-bar::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 40%; background: rgba(255,255,255,0.1); border-radius: 6px 6px 0 0; }
+.funnel-num { font-size: 0.75rem; color: var(--muted); width: 80px; text-align: right; flex-shrink: 0; }
+.funnel-arrow { font-size: 0.7rem; color: var(--muted); margin: 2px 0 2px 110px; }
+.funnel-arrow b { color: var(--primary); }
 
-  /* Optimization tips */
-  .tip-item {
-    display: flex;
-    gap: 12px;
-    padding: 12px;
-    background: var(--surface2);
-    border-radius: 8px;
-    margin-bottom: 8px;
-    border-left: 3px solid var(--primary);
-  }
-  .tip-icon { font-size: 1.2rem; }
-  .tip-title { font-size: 0.85rem; font-weight: 600; margin-bottom: 3px; }
-  .tip-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
-  .tip-impact { font-size: 0.72rem; color: var(--accent); margin-top: 4px; }
+/* KPI grid */
+.kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 16px; }
+.kpi-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.kpi-label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+.kpi-value { font-size: 1.5rem; font-weight: 700; line-height: 1; }
+.kpi-sub { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+.c-green { color: var(--accent); }
+.c-blue { color: #6699ff; }
+.c-warn { color: var(--warning); }
+.c-danger { color: var(--danger); }
 
-  .section-gap { margin-bottom: 20px; }
-  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+/* Badge */
+.badge { display: inline-block; font-size: 0.68rem; padding: 2px 7px; border-radius: 20px; font-weight: 600; }
+.badge-g { background: rgba(0,200,81,0.15); color: var(--success); border: 1px solid rgba(0,200,81,0.3); }
+.badge-w { background: rgba(255,187,51,0.15); color: var(--warning); border: 1px solid rgba(255,187,51,0.3); }
+.badge-r { background: rgba(255,68,68,0.15); color: var(--danger); border: 1px solid rgba(255,68,68,0.3); }
 
-  .badge {
-    display: inline-block;
-    font-size: 0.7rem;
-    padding: 2px 8px;
-    border-radius: 20px;
-    font-weight: 600;
-  }
-  .badge-good { background: rgba(0,200,81,0.15); color: var(--success); border: 1px solid rgba(0,200,81,0.3); }
-  .badge-warn { background: rgba(255,187,51,0.15); color: var(--warning); border: 1px solid rgba(255,187,51,0.3); }
-  .badge-bad { background: rgba(255,68,68,0.15); color: var(--danger); border: 1px solid rgba(255,68,68,0.3); }
+/* Tips */
+.tip { display: flex; gap: 12px; padding: 12px; background: var(--surface2); border-radius: 8px; margin-bottom: 8px; border-left: 3px solid var(--primary); }
+.tip-icon { font-size: 1.1rem; flex-shrink: 0; }
+.tip-title { font-size: 0.83rem; font-weight: 600; margin-bottom: 3px; }
+.tip-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.5; }
+.tip-impact { font-size: 0.7rem; color: var(--accent); margin-top: 4px; }
 
-  .reset-btn {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin-top: 12px;
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.82rem;
-    transition: all 0.2s;
-  }
-  .reset-btn:hover { border-color: var(--primary); color: var(--primary); }
+/* Pixel Guide */
+.guide-toggle { width: 100%; padding: 14px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 0.9rem; font-weight: 600; cursor: pointer; text-align: left; display: flex; justify-content: space-between; align-items: center; transition: border-color 0.2s; margin-bottom: 4px; }
+.guide-toggle:hover { border-color: var(--primary); }
+.guide-toggle .arrow { transition: transform 0.3s; font-size: 0.8rem; }
+.guide-toggle.open .arrow { transform: rotate(180deg); }
+.guide-body { display: none; background: var(--surface); border: 1px solid var(--border); border-top: none; border-radius: 0 0 12px 12px; padding: 20px; margin-bottom: 16px; }
+.guide-body.show { display: block; }
+
+.step { display: flex; gap: 16px; margin-bottom: 24px; }
+.step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.step-content h3 { font-size: 0.92rem; font-weight: 700; margin-bottom: 6px; }
+.step-content p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; margin-bottom: 6px; }
+.step-content .path { font-family: monospace; background: var(--surface2); border: 1px solid var(--border); padding: 6px 10px; border-radius: 6px; font-size: 0.78rem; color: var(--accent); display: block; margin: 6px 0; }
+.step-content ul { font-size: 0.8rem; color: var(--muted); line-height: 1.8; padding-left: 16px; margin-bottom: 6px; }
+.step-content .tag { display: inline-block; background: rgba(100,255,218,0.1); color: var(--accent); border: 1px solid rgba(100,255,218,0.25); border-radius: 4px; padding: 2px 7px; font-size: 0.75rem; margin: 2px; }
+.step-content .warn-box { background: rgba(255,187,51,0.08); border: 1px solid rgba(255,187,51,0.25); border-radius: 8px; padding: 10px 14px; font-size: 0.78rem; color: var(--warning); margin-top: 8px; }
+
+/* Hidden by mode */
+.ecom-only, .traffic-only { display: none; }
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Meta Ads 電商銷售漏斗計算器</h1>
-  <p class="subtitle">輸入廣告參數，即時計算 ROAS、模擬漏斗優化 — 基準數據來自 Meta Ads 電商產業</p>
+  <h1>Meta Ads 銷售漏斗計算器</h1>
+  <p class="subtitle">對照 Meta 後台直接填入數字，自動換算 CPM、CTR、ROAS</p>
 
-  <!-- KPI Summary -->
-  <div class="kpi-grid" id="kpiGrid">
-    <div class="kpi-card">
-      <div class="kpi-label">ROAS</div>
-      <div class="kpi-value kpi-good" id="kpiRoas">—</div>
-      <div class="kpi-sub" id="kpiRoasBadge">計算中</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">每次購買成本 (CPA)</div>
-      <div class="kpi-value kpi-blue" id="kpiCpa">—</div>
-      <div class="kpi-sub">Cost Per Acquisition</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">每月購買數</div>
-      <div class="kpi-value kpi-blue" id="kpiPurchases">—</div>
-      <div class="kpi-sub">Purchases / Month</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">淨利潤</div>
-      <div class="kpi-value" id="kpiProfit">—</div>
-      <div class="kpi-sub" id="kpiProfitSub">Revenue − AdSpend − COGS</div>
-    </div>
+  <!-- Mode toggle -->
+  <div class="mode-toggle">
+    <button class="mode-btn active" onclick="setMode('traffic')" id="btn-traffic">引流模式（Portaly）</button>
+    <button class="mode-btn" onclick="setMode('ecom')" id="btn-ecom">電商模式（直購）</button>
   </div>
 
-  <div class="grid-2 section-gap">
-    <!-- Left: Inputs -->
+  <div class="layout">
+    <!-- LEFT: Input Panel -->
     <div>
-      <div class="card section-gap">
-        <div class="card-title"><span class="icon">⚙️</span> 廣告投放設定</div>
-
-        <div class="input-group">
-          <label>月廣告預算 <span class="benchmark-tag">建議 $3,000–$30,000</span></label>
-          <div class="input-row">
-            <span class="unit">$</span>
-            <input type="number" id="budget" value="10000" min="100" max="1000000" step="100" oninput="calc()">
-          </div>
-        </div>
-
-        <div class="input-group">
-          <label>CPM（千次曝光成本）<span class="benchmark-tag">電商均值 $15–$25</span></label>
-          <div class="input-row">
-            <input type="range" id="cpmRange" min="5" max="80" value="20" oninput="syncRange('cpm','cpmRange');calc()">
-            <input type="number" id="cpm" value="20" min="5" max="80" step="0.5" oninput="syncInput('cpm','cpmRange');calc()" style="max-width:64px">
-            <span class="unit">$</span>
-          </div>
-        </div>
-
-        <div class="input-group">
-          <label>CTR（點擊率）<span class="benchmark-tag">電商均值 0.8%–1.5%</span></label>
-          <div class="input-row">
-            <input type="range" id="ctrRange" min="0.1" max="5" value="1.2" step="0.1" oninput="syncRange('ctr','ctrRange');calc()">
-            <input type="number" id="ctr" value="1.2" min="0.1" max="5" step="0.1" oninput="syncInput('ctr','ctrRange');calc()" style="max-width:64px">
-            <span class="unit">%</span>
-          </div>
-        </div>
-
-        <div class="input-group">
-          <label>CPC（每次點擊成本）</label>
-          <div class="input-row" style="background:rgba(0,0,0,0.2);">
-            <span class="unit" style="color:var(--text-muted)">自動</span>
-            <input type="number" id="cpcDisplay" readonly style="max-width:80px;opacity:0.7">
-            <span class="unit">$</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="card section-gap">
-        <div class="card-title"><span class="icon">🛒</span> 漏斗轉換率設定</div>
-
-        <div class="input-group">
-          <label>著陸頁 CVR（訪客→加入購物車）<span class="benchmark-tag">均值 2%–5%</span></label>
-          <div class="input-row">
-            <input type="range" id="lcvrRange" min="0.5" max="20" value="3" step="0.5" oninput="syncRange('lcvr','lcvrRange');calc()">
-            <input type="number" id="lcvr" value="3" min="0.5" max="20" step="0.5" oninput="syncInput('lcvr','lcvrRange');calc()" style="max-width:64px">
-            <span class="unit">%</span>
-          </div>
-        </div>
-
-        <div class="input-group">
-          <label>結帳啟動率（購物車→結帳）<span class="benchmark-tag">均值 50%–70%</span></label>
-          <div class="input-row">
-            <input type="range" id="checkoutRange" min="10" max="95" value="60" step="5" oninput="syncRange('checkout','checkoutRange');calc()">
-            <input type="number" id="checkout" value="60" min="10" max="95" step="5" oninput="syncInput('checkout','checkoutRange');calc()" style="max-width:64px">
-            <span class="unit">%</span>
-          </div>
-        </div>
-
-        <div class="input-group">
-          <label>結帳完成率（結帳→付款）<span class="benchmark-tag">均值 55%–75%</span></label>
-          <div class="input-row">
-            <input type="range" id="purchaseRange" min="10" max="95" value="65" step="5" oninput="syncRange('purchase','purchaseRange');calc()">
-            <input type="number" id="purchase" value="65" min="10" max="95" step="5" oninput="syncInput('purchase','purchaseRange');calc()" style="max-width:64px">
-            <span class="unit">%</span>
-          </div>
-        </div>
-      </div>
-
+      <!-- Meta 後台數據 -->
       <div class="card">
-        <div class="card-title"><span class="icon">💰</span> 商品利潤設定</div>
+        <div class="card-title"><div class="dot"></div> Meta 後台數據（直接填）</div>
 
-        <div class="input-group">
-          <label>平均訂單金額 (AOV) <span class="benchmark-tag">電商均值 $60–$120</span></label>
-          <div class="input-row">
-            <span class="unit">$</span>
-            <input type="number" id="aov" value="85" min="1" max="10000" step="5" oninput="calc()">
+        <div class="field">
+          <div class="field-label">
+            花費金額
+            <span class="field-hint">廣告後台 → 花費金額</span>
+          </div>
+          <div class="input-wrap">
+            <span class="unit">NT$</span>&nbsp;
+            <input type="number" id="spend" value="504" min="0" oninput="calc()">
           </div>
         </div>
 
-        <div class="input-group">
-          <label>商品成本率 (COGS %) <span class="benchmark-tag">服飾均值 30%–50%</span></label>
-          <div class="input-row">
-            <input type="range" id="cogsRange" min="10" max="80" value="40" step="5" oninput="syncRange('cogs','cogsRange');calc()">
-            <input type="number" id="cogs" value="40" min="10" max="80" step="5" oninput="syncInput('cogs','cogsRange');calc()" style="max-width:64px">
+        <div class="field">
+          <div class="field-label">
+            曝光次數
+            <span class="field-hint">廣告後台 → 曝光次數</span>
+          </div>
+          <div class="input-wrap">
+            <input type="number" id="impressions" value="7370" min="1" oninput="calc()">
+            <span class="unit">次</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            觸及人數
+            <span class="field-hint">廣告後台 → 觸及人數</span>
+          </div>
+          <div class="input-wrap">
+            <input type="number" id="reach" value="4200" min="1" oninput="calc()">
+            <span class="unit">人</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            連結點擊次數
+            <span class="field-hint">廣告後台 → 連結點擊次數</span>
+          </div>
+          <div class="input-wrap">
+            <input type="number" id="clicks" value="164" min="0" oninput="calc()">
+            <span class="unit">次</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            著陸頁瀏覽次數
+            <span class="field-hint">廣告後台 → 著陸頁瀏覽次數</span>
+          </div>
+          <div class="input-wrap">
+            <input type="number" id="lpviews" value="150" min="0" oninput="calc()">
+            <span class="unit">次</span>
+          </div>
+        </div>
+
+        <!-- Auto-computed from Meta data -->
+        <div class="sep"></div>
+        <div class="card-title" style="margin-bottom:10px"><div class="dot green"></div> 自動換算結果</div>
+        <div class="auto-grid">
+          <div class="auto-card">
+            <div class="auto-label">CPM（每千次曝光費用）</div>
+            <div class="auto-value" id="cpm">—</div>
+            <div class="auto-sub">台灣電商基準：NT$60–150</div>
+          </div>
+          <div class="auto-card">
+            <div class="auto-label">CPC（每次點擊費用）</div>
+            <div class="auto-value blue" id="cpc">—</div>
+            <div class="auto-sub">基準：NT$3–20</div>
+          </div>
+          <div class="auto-card">
+            <div class="auto-label">CTR（連結點擊率）</div>
+            <div class="auto-value blue" id="ctr">—</div>
+            <div class="auto-sub">基準：1%–3%</div>
+          </div>
+          <div class="auto-card">
+            <div class="auto-label">Frequency（頻率）</div>
+            <div class="auto-value blue" id="freq">—</div>
+            <div class="auto-sub">建議：1.5–3.0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 引流模式：Portaly 數據 -->
+      <div class="card traffic-only" id="trafficCard">
+        <div class="card-title"><div class="dot yellow"></div> Portaly 後台數據</div>
+
+        <div class="field">
+          <div class="field-label">
+            瀏覽人數
+            <span class="field-hint">Portaly → 網頁數據 → 瀏覽人數</span>
+          </div>
+          <div class="input-wrap">
+            <input type="number" id="plyVisitors" value="180" min="0" oninput="calc()">
+            <span class="unit">人</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            點擊（點了 Portaly 內的連結）
+            <span class="field-hint">Portaly → 網頁數據 → 點擊</span>
+          </div>
+          <div class="input-wrap">
+            <input type="number" id="plyClicks" value="6" min="0" oninput="calc()">
+            <span class="unit">次</span>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+        <div class="auto-grid">
+          <div class="auto-card">
+            <div class="auto-label">Portaly CTR</div>
+            <div class="auto-value warn" id="plyCtr">—</div>
+            <div class="auto-sub">點擊 ÷ 瀏覽人數</div>
+          </div>
+          <div class="auto-card">
+            <div class="auto-label">廣告→Portaly 到達率</div>
+            <div class="auto-value warn" id="arrivalRate">—</div>
+            <div class="auto-sub">Portaly瀏覽 ÷ 著陸頁瀏覽</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 電商模式：購買數據 -->
+      <div class="card ecom-only" id="ecomCard">
+        <div class="card-title"><div class="dot green"></div> 購買數據（Meta 後台 → 轉換）</div>
+
+        <div class="field">
+          <div class="field-label">
+            購買次數
+            <span class="field-hint green">後台 → 購買（次數）</span>
+          </div>
+          <div class="input-wrap">
+            <input type="number" id="purchases" value="5" min="0" oninput="calc()">
+            <span class="unit">次</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            購買轉換值（總營收）
+            <span class="field-hint green">後台 → 購買轉換值</span>
+          </div>
+          <div class="input-wrap">
+            <span class="unit">NT$</span>&nbsp;
+            <input type="number" id="revenue" value="3500" min="0" oninput="calc()">
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            商品成本率
+            <span class="field-hint green">COGS ÷ 售價（例如 40%）</span>
+          </div>
+          <div class="input-wrap">
+            <input type="number" id="cogs" value="40" min="0" max="100" oninput="calc()">
             <span class="unit">%</span>
           </div>
         </div>
 
-        <button class="reset-btn" onclick="resetDefaults()">↺ 重置為電商產業基準值</button>
+        <div class="sep"></div>
+        <div class="auto-grid">
+          <div class="auto-card">
+            <div class="auto-label">ROAS（廣告投資報酬率）</div>
+            <div class="auto-value" id="roas">—</div>
+            <div class="auto-sub">目標：≥ 3.0x</div>
+          </div>
+          <div class="auto-card">
+            <div class="auto-label">每次購買成本（CPA）</div>
+            <div class="auto-value blue" id="cpa">—</div>
+            <div class="auto-sub">花費 ÷ 購買次數</div>
+          </div>
+          <div class="auto-card">
+            <div class="auto-label">平均客單價（AOV）</div>
+            <div class="auto-value blue" id="aov">—</div>
+            <div class="auto-sub">購買轉換值 ÷ 購買次數</div>
+          </div>
+          <div class="auto-card">
+            <div class="auto-label">淨利潤</div>
+            <div class="auto-value" id="profit">—</div>
+            <div class="auto-sub">營收 − 廣告費 − COGS</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Right: Funnel + Results -->
+    <!-- RIGHT: Results -->
     <div>
-      <div class="card section-gap">
-        <div class="card-title"><span class="icon">📊</span> 銷售漏斗視覺化</div>
-        <div class="funnel-wrap" id="funnelWrap">
-          <!-- Generated by JS -->
-        </div>
-      </div>
-
-      <div class="card section-gap">
-        <div class="card-title"><span class="icon">📈</span> ROAS 分析</div>
-        <div class="roas-gauge">
-          <svg class="gauge-svg" viewBox="0 0 160 90" id="gaugeSvg">
-            <defs>
-              <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:#ff4444"/>
-                <stop offset="33%" style="stop-color:#ffbb33"/>
-                <stop offset="66%" style="stop-color:#0866FF"/>
-                <stop offset="100%" style="stop-color:#64ffda"/>
-              </linearGradient>
-            </defs>
-            <path d="M 20 80 A 60 60 0 0 1 140 80" fill="none" stroke="rgba(42,53,80,0.8)" stroke-width="10" stroke-linecap="round"/>
-            <path id="gaugeArc" d="M 20 80 A 60 60 0 0 1 140 80" fill="none" stroke="url(#gaugeGrad)" stroke-width="10" stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
-            <line id="gaugeNeedle" x1="80" y1="80" x2="80" y2="28" stroke="#fff" stroke-width="2" stroke-linecap="round" transform="rotate(0, 80, 80)"/>
-            <circle cx="80" cy="80" r="4" fill="#fff"/>
-            <text x="20" y="90" fill="#ff4444" font-size="8" text-anchor="middle">0</text>
-            <text x="80" y="25" fill="#ffbb33" font-size="8" text-anchor="middle">2</text>
-            <text x="140" y="90" fill="#64ffda" font-size="8" text-anchor="middle">5+</text>
-          </svg>
-          <div style="font-size:2.4rem; font-weight:800; color:var(--accent)" id="gaugeValue">—</div>
-          <div class="roas-label" id="gaugeLabel">ROAS</div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
-          <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px">
-            <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px">損益平衡 ROAS</div>
-            <div style="font-size:1.1rem;font-weight:700;color:#6699ff" id="beRoas">—</div>
-          </div>
-          <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px">
-            <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px">目標 ROAS（20% 利潤）</div>
-            <div style="font-size:1.1rem;font-weight:700;color:#ffbb33" id="targetRoas">—</div>
-          </div>
-        </div>
-      </div>
-
+      <!-- Funnel -->
       <div class="card">
-        <div class="card-title"><span class="icon">🗂️</span> 損益平衡分析（按 AOV）</div>
-        <div id="beTable"></div>
+        <div class="card-title"><div class="dot"></div> 銷售漏斗</div>
+        <div id="funnelWrap"></div>
+      </div>
+
+      <!-- KPI -->
+      <div class="card">
+        <div class="card-title"><div class="dot green"></div> 關鍵指標分析</div>
+        <div class="kpi-grid" id="kpiGrid"></div>
+      </div>
+
+      <!-- Optimization Tips -->
+      <div class="card">
+        <div class="card-title"><div class="dot yellow"></div> 優化建議</div>
+        <div id="tips"></div>
       </div>
     </div>
   </div>
 
-  <!-- Scenarios -->
-  <div class="card section-gap">
-    <div class="card-title"><span class="icon">🚀</span> 優化情境模擬</div>
-    <div class="scenario-grid" id="scenarioGrid"></div>
-  </div>
+  <!-- Pixel Guide Accordion -->
+  <button class="guide-toggle" id="guideToggle" onclick="toggleGuide()">
+    <span>📘 教學：把廣告從 Portaly 改成直接連到商品頁 + 安裝 Meta Pixel</span>
+    <span class="arrow">▼</span>
+  </button>
+  <div class="guide-body" id="guideBody">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>建立 Meta Pixel</h3>
+        <p>Meta Pixel 是一段追蹤碼，裝在你的商品網站後，Meta 就能追蹤「誰看了廣告 → 誰真的買了」，並自動計算 ROAS。</p>
+        <span class="path">Meta 廣告後台 → 活動管理工具 → 資料來源 → Pixel → 建立 Pixel</span>
+        <ul>
+          <li>命名後按「建立」，你會拿到一串 Pixel ID（15 位數字）</li>
+          <li>選擇安裝方式：如果有 Shopify / Wix / Shopline 等平台，選「合作夥伴整合」最簡單</li>
+        </ul>
+      </div>
+    </div>
 
-  <!-- Optimization Tips -->
-  <div class="card">
-    <div class="card-title"><span class="icon">💡</span> 智慧優化建議</div>
-    <div id="tipsContainer"></div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>把 Pixel 安裝到商品網站</h3>
+        <p>依你的電商平台選擇對應方式：</p>
+        <div>
+          <span class="tag">Shopify</span> 後台 → 線上商店 → 偏好設定 → Facebook Pixel ID 貼上即可
+        </div>
+        <div style="margin-top:8px">
+          <span class="tag">Shopline</span> 後台 → 設定 → 行銷工具 → Meta Pixel → 貼上 ID
+        </div>
+        <div style="margin-top:8px">
+          <span class="tag">自架網站</span> 把以下程式碼貼在 &lt;head&gt; 內：
+        </div>
+        <span class="path">&lt;script&gt; !function(f,b,e,v,n,t,s) ... fbq('init', '你的Pixel ID'); fbq('track', 'PageView'); &lt;/script&gt;</span>
+        <p>完整程式碼在 Pixel 建立後的「手動安裝」頁面可以複製。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>設定「購買」轉換事件</h3>
+        <p>Pixel 裝好後，還需要告訴 Meta「這個頁面 = 購買完成」，它才會記錄 ROAS。</p>
+        <ul>
+          <li>Shopify / Shopline 平台：購買事件通常自動追蹤，無需額外設定</li>
+          <li>自架網站：在訂單完成頁（感謝頁）加上：</li>
+        </ul>
+        <span class="path">fbq('track', 'Purchase', &#123;value: 訂單金額, currency: 'TWD'&#125;);</span>
+        <p>設定後在 Meta 後台 → 活動管理工具 → 測試事件，可以即時確認是否偵測到。</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>把廣告連結從 Portaly 改成直接連到商品頁</h3>
+        <p>這是最關鍵的一步。現在的流程是：</p>
+        <span class="path">Meta 廣告 → Portaly（中繼頁）→ 商品頁</span>
+        <p>改成：</p>
+        <span class="path">Meta 廣告 → 商品頁（直接）</span>
+        <ul>
+          <li>進入廣告後台，點選廣告組合 → 編輯廣告</li>
+          <li>找到「目的地 URL」或「網站 URL」欄位</li>
+          <li>把 Portaly 連結換成你的商品頁網址（例如 yourshop.com/products/xxx）</li>
+          <li>廣告目標改成「轉換」→ 優化事件選「購買」</li>
+        </ul>
+        <div class="warn-box">
+          ⚠️ 注意：Portaly 是集合多個連結的頁面，適合 Instagram 首頁連結，但廣告應該直接連到商品頁，減少一個跳轉步驟，能明顯提升轉換率。
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h3>修改廣告系列目標</h3>
+        <p>目前你的廣告可能是「流量」目標（只優化點擊），改成「銷售」目標後 Meta 會把廣告推給更可能購買的人。</p>
+        <span class="path">建立廣告系列 → 目標選「銷售」→ 轉換位置選「網站」→ 優化事件選「購買」</span>
+        <ul>
+          <li>新的 Pixel 前期資料不足，建議先讓它跑 7–14 天學習期</li>
+          <li>學習期間預算不要大幅更動，讓演算法穩定收集資料</li>
+          <li>每天至少 1 次購買轉換，演算法才能快速學習（預算參考：每日 NT$300–500 起）</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-const DEFAULTS = { budget:10000, cpm:20, ctr:1.2, lcvr:3, checkout:60, purchase:65, aov:85, cogs:40 };
+let currentMode = 'traffic';
 
-function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
-function el(id) { return document.getElementById(id); }
-
-function syncRange(inputId, rangeId) {
-  el(inputId).value = el(rangeId).value;
-}
-function syncInput(inputId, rangeId) {
-  el(rangeId).value = el(inputId).value;
-}
-
-function resetDefaults() {
-  Object.entries(DEFAULTS).forEach(([k, val]) => {
-    if (el(k)) el(k).value = val;
-    if (el(k+'Range')) el(k+'Range').value = val;
-  });
+function setMode(m) {
+  currentMode = m;
+  document.getElementById('btn-traffic').className = 'mode-btn' + (m === 'traffic' ? ' active' : '');
+  document.getElementById('btn-ecom').className = 'mode-btn' + (m === 'ecom' ? ' active' : '');
+  document.querySelectorAll('.traffic-only').forEach(el => el.style.display = m === 'traffic' ? 'block' : 'none');
+  document.querySelectorAll('.ecom-only').forEach(el => el.style.display = m === 'ecom' ? 'block' : 'none');
   calc();
 }
 
-function calcMetrics(p) {
-  const impressions = (p.budget / p.cpm) * 1000;
-  const clicks = impressions * (p.ctr / 100);
-  const cpc = p.cpm / (p.ctr * 10);
-  const addToCart = clicks * (p.lcvr / 100);
-  const checkoutInit = addToCart * (p.checkout / 100);
-  const purchases = checkoutInit * (p.purchase / 100);
-  const revenue = purchases * p.aov;
-  const roas = revenue / p.budget;
-  const cpa = purchases > 0 ? p.budget / purchases : 0;
-  const grossProfit = revenue * (1 - p.cogs / 100);
-  const netProfit = grossProfit - p.budget;
-  const beRoas = 1 / (1 - p.cogs / 100);
-  const targetRoas = beRoas * 1.2;
-  return { impressions, clicks, cpc, addToCart, checkoutInit, purchases, revenue, roas, cpa, grossProfit, netProfit, beRoas, targetRoas };
+function fmt(n, dec = 0) {
+  if (!isFinite(n) || isNaN(n)) return '—';
+  return n.toLocaleString('zh-TW', { minimumFractionDigits: dec, maximumFractionDigits: dec });
 }
 
-function fmt(n, decimals=0) {
-  if (n >= 1000000) return '$' + (n/1000000).toFixed(1) + 'M';
-  if (n >= 1000) return '$' + (n/1000).toFixed(1) + 'K';
-  return '$' + n.toFixed(decimals);
-}
-function fmtN(n) {
-  if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
-  if (n >= 1000) return (n/1000).toFixed(1) + 'K';
-  return Math.round(n).toLocaleString();
+function fmtNT(n, dec = 0) {
+  if (!isFinite(n) || isNaN(n)) return '—';
+  return 'NT$' + fmt(n, dec);
 }
 
-function updateFunnel(m, p) {
+function colorClass(val, good, warn) {
+  if (val >= good) return 'c-green';
+  if (val >= warn) return 'c-warn';
+  return 'c-danger';
+}
+
+function badgeClass(val, good, warn) {
+  if (val >= good) return 'badge-g';
+  if (val >= warn) return 'badge-w';
+  return 'badge-r';
+}
+
+function setAutoVal(id, text, cls) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text;
+  el.className = 'auto-value' + (cls ? ' ' + cls : '');
+}
+
+function calc() {
+  const spend = +document.getElementById('spend').value || 0;
+  const impressions = +document.getElementById('impressions').value || 1;
+  const reach = +document.getElementById('reach').value || 1;
+  const clicks = +document.getElementById('clicks').value || 0;
+  const lpviews = +document.getElementById('lpviews').value || 0;
+
+  // Auto-compute Meta metrics
+  const cpm = spend / impressions * 1000;
+  const cpc = clicks > 0 ? spend / clicks : 0;
+  const ctr = clicks / impressions * 100;
+  const freq = impressions / reach;
+
+  const cpmCls = cpm <= 150 ? '' : cpm <= 250 ? 'warn' : 'danger';
+  const cpcCls = cpc <= 20 ? '' : 'warn';
+  const ctrCls = ctr >= 1 ? '' : ctr >= 0.5 ? 'warn' : 'danger';
+  const freqCls = freq >= 1.5 && freq <= 3 ? '' : freq > 3 ? 'warn' : '';
+
+  setAutoVal('cpm', spend > 0 ? fmtNT(cpm, 1) : '—', cpmCls);
+  setAutoVal('cpc', clicks > 0 ? fmtNT(cpc, 1) : '—', cpcCls);
+  setAutoVal('ctr', clicks > 0 ? fmt(ctr, 2) + '%' : '—', ctrCls);
+  setAutoVal('freq', fmtNT === undefined ? '—' : fmt(freq, 2), freqCls);
+
+  if (currentMode === 'traffic') calcTraffic(spend, impressions, clicks, lpviews);
+  else calcEcom(spend, impressions, clicks, lpviews);
+}
+
+function calcTraffic(spend, impressions, clicks, lpviews) {
+  const plyVisitors = +document.getElementById('plyVisitors').value || 0;
+  const plyClicks = +document.getElementById('plyClicks').value || 0;
+
+  const plyCtr = plyVisitors > 0 ? plyClicks / plyVisitors * 100 : 0;
+  const arrivalRate = lpviews > 0 && plyVisitors > 0 ? plyVisitors / lpviews * 100 : 0;
+
+  setAutoVal('plyCtr', plyVisitors > 0 ? fmt(plyCtr, 1) + '%' : '—', plyCtr >= 5 ? '' : plyCtr >= 2 ? 'warn' : 'danger');
+  setAutoVal('arrivalRate', arrivalRate > 0 ? fmt(arrivalRate, 1) + '%' : '—', '');
+
+  // Funnel: Impressions → Clicks → LP Views → Portaly Visitors → Portaly Clicks
   const steps = [
-    { label: '曝光', val: m.impressions, color: '#0866FF', pct: null },
-    { label: '點擊', val: m.clicks, color: '#0552cc', pct: p.ctr + '%' },
-    { label: '加入購物車', val: m.addToCart, color: '#6200ea', pct: p.lcvr + '%' },
-    { label: '開始結帳', val: m.checkoutInit, color: '#9c27b0', pct: p.checkout + '%' },
-    { label: '完成購買', val: m.purchases, color: '#00c851', pct: p.purchase + '%' },
+    { label: '曝光次數', val: impressions, color: '#0866FF' },
+    { label: '連結點擊', val: clicks, color: '#1877f2' },
+    { label: '著陸頁瀏覽', val: lpviews, color: '#0052cc' },
+    { label: 'Portaly 瀏覽', val: plyVisitors, color: '#f59e0b' },
+    { label: 'Portaly 點擊', val: plyClicks, color: '#10b981' },
   ];
-  const maxVal = m.impressions;
+  renderFunnel(steps);
+
+  // KPIs
+  const cpm = spend / impressions * 1000;
+  const cpc = clicks > 0 ? spend / clicks : 0;
+  const costPerLPView = lpviews > 0 ? spend / lpviews : 0;
+  const costPerPlyClick = plyClicks > 0 ? spend / plyClicks : 0;
+
+  document.getElementById('kpiGrid').innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-label">每次著陸頁瀏覽費用</div>
+      <div class="kpi-value c-blue">${lpviews > 0 ? fmtNT(costPerLPView, 1) : '—'}</div>
+      <div class="kpi-sub">Cost Per Landing Page View</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">每次 Portaly 點擊費用</div>
+      <div class="kpi-value c-warn">${plyClicks > 0 ? fmtNT(costPerPlyClick, 0) : '—'}</div>
+      <div class="kpi-sub">Cost Per Portaly Click</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">廣告 → Portaly 流失率</div>
+      <div class="kpi-value c-warn">${lpviews > 0 && plyVisitors > 0 ? fmt((1 - plyVisitors/lpviews)*100, 1) + '%' : '—'}</div>
+      <div class="kpi-sub">中繼頁造成的跳出</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Portaly CTR</div>
+      <div class="kpi-value ${plyVisitors > 0 && plyCtr < 3 ? 'c-danger' : 'c-blue'}">${plyVisitors > 0 ? fmt(plyCtr, 1) + '%' : '—'}</div>
+      <div class="kpi-sub">點擊 ÷ 瀏覽（基準 ≥ 5%）</div>
+    </div>
+  `;
+
+  renderTrafficTips(spend, clicks, lpviews, plyVisitors, plyClicks, plyCtr, cpm);
+}
+
+function calcEcom(spend, impressions, clicks, lpviews) {
+  const purchases = +document.getElementById('purchases').value || 0;
+  const revenue = +document.getElementById('revenue').value || 0;
+  const cogsRate = +document.getElementById('cogs').value / 100 || 0;
+
+  const roas = spend > 0 && revenue > 0 ? revenue / spend : 0;
+  const cpa = purchases > 0 ? spend / purchases : 0;
+  const aov = purchases > 0 ? revenue / purchases : 0;
+  const cogs = revenue * cogsRate;
+  const profit = revenue - spend - cogs;
+  const cvr = lpviews > 0 && purchases > 0 ? purchases / lpviews * 100 : 0;
+  const cpm = spend / impressions * 1000;
+
+  const roasCls = roas >= 3 ? '' : roas >= 2 ? 'warn' : 'danger';
+  setAutoVal('roas', roas > 0 ? fmt(roas, 2) + 'x' : '—', roasCls);
+  setAutoVal('cpa', purchases > 0 ? fmtNT(cpa, 0) : '—', '');
+  setAutoVal('aov', purchases > 0 ? fmtNT(aov, 0) : '—', 'blue');
+  const profitCls = profit > 0 ? '' : 'danger';
+  setAutoVal('profit', revenue > 0 ? fmtNT(profit, 0) : '—', profitCls);
+
+  // Funnel
+  const steps = [
+    { label: '曝光次數', val: impressions, color: '#0866FF' },
+    { label: '連結點擊', val: clicks, color: '#1877f2' },
+    { label: '著陸頁瀏覽', val: lpviews, color: '#0052cc' },
+    { label: '購買次數', val: purchases, color: '#10b981' },
+  ];
+  renderFunnel(steps);
+
+  // KPI grid
+  const roasLabel = roas >= 3 ? '<span class="badge badge-g">達標</span>' : roas >= 2 ? '<span class="badge badge-w">待優化</span>' : '<span class="badge badge-r">虧損風險</span>';
+  document.getElementById('kpiGrid').innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-label">ROAS</div>
+      <div class="kpi-value ${roas >= 3 ? 'c-green' : roas >= 2 ? 'c-warn' : 'c-danger'}">${roas > 0 ? fmt(roas, 2) + 'x' : '—'}</div>
+      <div class="kpi-sub">${roasLabel} 目標 ≥ 3.0x</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">CPA（每次購買成本）</div>
+      <div class="kpi-value c-blue">${purchases > 0 ? fmtNT(cpa, 0) : '—'}</div>
+      <div class="kpi-sub">需低於客單價才有利潤</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">著陸頁 CVR</div>
+      <div class="kpi-value ${cvr >= 2 ? 'c-green' : cvr >= 1 ? 'c-warn' : 'c-danger'}">${cvr > 0 ? fmt(cvr, 2) + '%' : '—'}</div>
+      <div class="kpi-sub">基準：1%–3%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">淨利潤</div>
+      <div class="kpi-value ${profit > 0 ? 'c-green' : 'c-danger'}">${revenue > 0 ? fmtNT(profit, 0) : '—'}</div>
+      <div class="kpi-sub">營收 − 廣告費 − COGS</div>
+    </div>
+  `;
+
+  renderEcomTips(roas, clicks, lpviews, purchases, cvr, cpm, aov, profit, spend);
+}
+
+function renderFunnel(steps) {
+  const max = steps[0].val || 1;
   let html = '';
-  steps.forEach((s, i) => {
-    const pct = Math.max(6, (s.val / maxVal) * 100);
-    html += `<div class="funnel-step">
-      <div class="funnel-label">${s.label}</div>
-      <div class="funnel-bar-wrap">
-        <div class="funnel-bar" style="width:${pct}%;background:${s.color}">
-          ${pct > 12 ? fmtN(s.val) : ''}
+  for (let i = 0; i < steps.length; i++) {
+    const s = steps[i];
+    const pct = Math.max((s.val / max) * 100, 2);
+    const numStr = s.val >= 1000 ? fmt(s.val) : s.val;
+    html += `
+      <div class="funnel-step">
+        <div class="funnel-label">${s.label}</div>
+        <div class="funnel-bar-wrap">
+          <div class="funnel-bar" style="width:${pct}%;background:${s.color}">${numStr}</div>
         </div>
-      </div>
-      <div class="funnel-num">${pct <= 12 ? fmtN(s.val) : ''}</div>
-    </div>`;
-    if (i < steps.length - 1 && s.pct) {
-      html += `<div class="funnel-arrow">↓ 轉換率 <span>${steps[i+1].pct}</span></div>`;
+        <div class="funnel-num">${s.val > 0 ? fmt(s.val) + '人/次' : '—'}</div>
+      </div>`;
+    if (i < steps.length - 1 && steps[i+1].val > 0 && s.val > 0) {
+      const rate = (steps[i+1].val / s.val * 100).toFixed(1);
+      html += `<div class="funnel-arrow">↓ &nbsp;<b>${rate}%</b> 進入下一步</div>`;
     }
-  });
-  el('funnelWrap').innerHTML = html;
+  }
+  document.getElementById('funnelWrap').innerHTML = html;
 }
 
-function updateGauge(roas) {
-  const maxRoas = 5;
-  const pct = Math.min(roas / maxRoas, 1);
-  const totalLen = 188.5;
-  const offset = totalLen * (1 - pct);
-  el('gaugeArc').setAttribute('stroke-dashoffset', offset);
-  const angle = -90 + pct * 180;
-  el('gaugeNeedle').setAttribute('transform', `rotate(${angle}, 80, 80)`);
-  el('gaugeValue').textContent = roas.toFixed(2) + 'x';
-}
+function renderTrafficTips(spend, clicks, lpviews, plyVisitors, plyClicks, plyCtr, cpm) {
+  let tips = [];
 
-function roasColor(roas, beRoas) {
-  if (roas >= beRoas * 1.2) return 'kpi-good';
-  if (roas >= beRoas) return 'kpi-warn';
-  return 'kpi-bad';
-}
+  if (plyCtr < 3 && plyVisitors > 0) {
+    tips.push({
+      icon: '🔗',
+      title: 'Portaly CTR 偏低（' + fmt(plyCtr,1) + '%），建議直接連到商品頁',
+      desc: '每多一個跳轉步驟，就會流失用戶。把廣告連結直接指向商品頁，可減少 20–40% 流失。參考下方「教學」。',
+      impact: '預估效果：著陸頁 CVR 提升 1.5–2 倍'
+    });
+  }
 
-function updateKPI(m) {
-  el('kpiRoas').textContent = m.roas.toFixed(2) + 'x';
-  el('kpiRoas').className = 'kpi-value ' + roasColor(m.roas, m.beRoas);
+  if (lpviews > 0 && plyVisitors > 0 && plyVisitors / lpviews < 0.8) {
+    tips.push({
+      icon: '⚡',
+      title: 'Portaly 頁面流失率高（' + fmt((1 - plyVisitors/lpviews)*100, 1) + '%）',
+      desc: '超過 20% 的人點了廣告卻沒繼續看 Portaly，可能是頁面載入太慢或設計不夠吸睛。',
+      impact: '建議：改用直購連結，或優化 Portaly 首屏視覺'
+    });
+  }
 
-  const roasStatus = m.roas >= m.beRoas * 1.2 ? '盈利' : m.roas >= m.beRoas ? '損益平衡' : '虧損';
-  const badgeClass = m.roas >= m.beRoas * 1.2 ? 'badge-good' : m.roas >= m.beRoas ? 'badge-warn' : 'badge-bad';
-  el('kpiRoasBadge').innerHTML = `<span class="badge ${badgeClass}">${roasStatus}</span>`;
+  if (cpm > 200) {
+    tips.push({
+      icon: '💰',
+      title: 'CPM 偏高（' + fmtNT(cpm,0) + '），受眾競爭激烈',
+      desc: '嘗試擴大受眾或換用 Reels 版位，台灣 Reels CPM 通常比動態消息低 30–50%。',
+      impact: '可嘗試：興趣受眾 → 類似受眾（LAL 1–3%）'
+    });
+  }
 
-  el('kpiCpa').textContent = fmt(m.cpa, 2);
-  el('kpiPurchases').textContent = fmtN(m.purchases);
+  const ctr = clicks / (document.getElementById('impressions').value || 1) * 100;
+  if (ctr < 1) {
+    tips.push({
+      icon: '🎨',
+      title: 'CTR 低於 1%，廣告素材吸引力不足',
+      desc: '嘗試換用影片素材（CTR 通常比圖片高 2–3 倍），或在前 3 秒加入強烈視覺衝擊。',
+      impact: '目標：CTR 達到 1.5% 以上'
+    });
+  }
 
-  const profitColor = m.netProfit >= 0 ? 'kpi-good' : 'kpi-bad';
-  el('kpiProfit').textContent = (m.netProfit >= 0 ? '+' : '') + fmt(m.netProfit, 0);
-  el('kpiProfit').className = 'kpi-value ' + profitColor;
+  if (tips.length === 0) {
+    tips.push({
+      icon: '✅',
+      title: '數據看起來正常',
+      desc: '填入更多數據後可以獲得更精準的建議。也可以展開下方「教學」了解如何升級到電商模式。',
+      impact: ''
+    });
+  }
 
-  el('beRoas').textContent = m.beRoas.toFixed(2) + 'x';
-  el('targetRoas').textContent = m.targetRoas.toFixed(2) + 'x';
-  el('gaugeLabel').textContent = `損益平衡 ${m.beRoas.toFixed(2)}x | 目標 ${m.targetRoas.toFixed(2)}x`;
-}
-
-function updateBETable(p) {
-  const aovs = [40, 60, 80, 100, 120, 150];
-  const currentCpa = calcMetrics(p).cpa;
-  let html = '<table><tr><th>AOV</th><th>ROAS</th><th>淨利潤</th><th>CPA 上限</th><th>狀態</th></tr>';
-  aovs.forEach(aov => {
-    const mp = {...p, aov};
-    const mm = calcMetrics(mp);
-    const isHighlight = Math.abs(aov - p.aov) < 10;
-    const status = mm.roas >= mm.beRoas * 1.2 ? '<span class="badge badge-good">盈利</span>' :
-                   mm.roas >= mm.beRoas ? '<span class="badge badge-warn">平衡</span>' :
-                   '<span class="badge badge-bad">虧損</span>';
-    html += `<tr${isHighlight ? ' class="highlight"' : ''}>
-      <td>$${aov}${isHighlight ? ' ★' : ''}</td>
-      <td>${mm.roas.toFixed(2)}x</td>
-      <td style="color:${mm.netProfit>=0?'var(--accent)':'var(--danger)'}">${mm.netProfit>=0?'+':''}${fmt(mm.netProfit)}</td>
-      <td>$${(aov * (1 - p.cogs/100)).toFixed(2)}</td>
-      <td>${status}</td>
-    </tr>`;
-  });
-  html += '</table>';
-  el('beTable').innerHTML = html;
-}
-
-function updateScenarios(p, baseMetrics) {
-  const scenarios = [
-    {
-      name: '🔴 當前狀態', color: '#666',
-      changes: {},
-      desc: '目前設定'
-    },
-    {
-      name: '📱 優化廣告創意', color: '#0866FF',
-      changes: { ctr: Math.min(p.ctr * 1.5, 5) },
-      desc: 'CTR +50%（改善廣告素材）'
-    },
-    {
-      name: '🎯 優化受眾定向', color: '#6200ea',
-      changes: { cpm: p.cpm * 0.8, ctr: Math.min(p.ctr * 1.3, 5) },
-      desc: 'CPM -20%、CTR +30%'
-    },
-    {
-      name: '🛒 優化著陸頁', color: '#9c27b0',
-      changes: { lcvr: Math.min(p.lcvr * 1.5, 20) },
-      desc: '著陸頁 CVR +50%'
-    },
-    {
-      name: '💳 減少購物車放棄', color: '#00897b',
-      changes: { checkout: Math.min(p.checkout * 1.2, 95), purchase: Math.min(p.purchase * 1.1, 95) },
-      desc: '結帳率 +20%、完成率 +10%'
-    },
-    {
-      name: '🚀 全面優化', color: '#00c851',
-      changes: {
-        ctr: Math.min(p.ctr * 1.4, 5),
-        cpm: p.cpm * 0.85,
-        lcvr: Math.min(p.lcvr * 1.3, 20),
-        checkout: Math.min(p.checkout * 1.15, 95),
-        purchase: Math.min(p.purchase * 1.1, 95)
-      },
-      desc: '所有指標同步優化'
-    }
-  ];
-
-  let html = '';
-  scenarios.forEach((s, idx) => {
-    const sp = {...p, ...s.changes};
-    const sm = calcMetrics(sp);
-    const roasDiff = sm.roas - baseMetrics.roas;
-    const isActive = idx === 0;
-    html += `<div class="scenario-card${isActive?' active':''}" onclick="applyScenario(${idx})" data-idx="${idx}">
-      <div class="scenario-name" style="color:${s.color}">${s.name}</div>
-      <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:8px">${s.desc}</div>`;
-    if (Object.keys(s.changes).length > 0) {
-      Object.entries(s.changes).forEach(([k, val]) => {
-        const labels = {ctr:'CTR',cpm:'CPM',lcvr:'著陸頁CVR',checkout:'結帳率',purchase:'完成率'};
-        const orig = p[k];
-        const diff = val - orig;
-        html += `<div class="scenario-metric"><span>${labels[k]||k}</span><span>${orig.toFixed(1)} → <b>${val.toFixed(1)}</b></span></div>`;
-      });
-    }
-    html += `<div class="scenario-roas">${sm.roas.toFixed(2)}x ROAS`;
-    if (idx > 0) {
-      const sign = roasDiff >= 0 ? '+' : '';
-      html += ` <span style="font-size:0.75rem;color:${roasDiff>=0?'var(--accent)':'var(--danger)'}">(${sign}${roasDiff.toFixed(2)})</span>`;
-    }
-    html += `</div>`;
-    html += `<div style="font-size:0.72rem;color:var(--text-muted);margin-top:4px">淨利 <span style="color:${sm.netProfit>=0?'var(--accent)':'var(--danger)'}">${sm.netProfit>=0?'+':''}${fmt(sm.netProfit)}</span></div>`;
-    html += `</div>`;
-  });
-  el('scenarioGrid').innerHTML = html;
-  el('scenarioGrid')._scenarios = scenarios;
-  el('scenarioGrid')._baseParams = p;
-}
-
-function applyScenario(idx) {
-  const grid = el('scenarioGrid');
-  const scenarios = grid._scenarios;
-  const p = grid._baseParams;
-  if (!scenarios) return;
-  const s = scenarios[idx];
-  const newP = {...p, ...s.changes};
-  Object.entries(newP).forEach(([k, val]) => {
-    if (el(k)) el(k).value = val.toFixed(k === 'budget' ? 0 : 1);
-    if (el(k+'Range')) el(k+'Range').value = val;
-  });
-  // highlight active
-  grid.querySelectorAll('.scenario-card').forEach((c, i) => {
-    c.classList.toggle('active', i === idx);
-  });
-  calc(true); // skip scenario rebuild to avoid flicker
-}
-
-function updateTips(m, p) {
-  const tips = [];
-  if (p.ctr < 1.0) tips.push({
-    icon: '🎨', title: 'CTR 低於產業均值',
-    desc: `您的 CTR ${p.ctr}% 低於電商均值 1.2%。建議：測試動態影片素材、加強 CTA 按鈕、使用社會認同元素（評價數量、用戶數）。`,
-    impact: `CTR 提升至 1.5% 可使購買量增加 ${Math.round((1.5/p.ctr - 1)*100)}%`
-  });
-  if (p.cpm > 30) tips.push({
-    icon: '🎯', title: 'CPM 偏高',
-    desc: `CPM $${p.cpm} 偏高。建議：縮小受眾（提高相關性）、使用類似受眾（LAL 2-5%）、重新測試廣告版位（Feed vs Reels）。`,
-    impact: `CPM 降至 $20 可多獲 ${Math.round((p.cpm/20 - 1)*100)}% 曝光`
-  });
-  if (p.lcvr < 2.5) tips.push({
-    icon: '🖥️', title: '著陸頁轉換率待優化',
-    desc: `著陸頁 CVR ${p.lcvr}% 低於均值。建議：加快頁面載入速度（<3秒）、加入信任標誌、優化行動版 UX、使用單一清晰 CTA。`,
-    impact: `CVR 提升至 4% 可使購買量增加 ${Math.round((4/p.lcvr - 1)*100)}%`
-  });
-  if (p.checkout < 55) tips.push({
-    icon: '💳', title: '購物車放棄率過高',
-    desc: `結帳率 ${p.checkout}% 偏低。建議：簡化結帳流程（一頁式結帳）、增加支付方式（信用卡/LinePay）、顯示安全認證、提供限時優惠倒數。`,
-    impact: `結帳率提升至 70% 可使購買量增加 ${Math.round((70/p.checkout - 1)*100)}%`
-  });
-  if (m.roas < m.beRoas) tips.push({
-    icon: '⚠️', title: 'ROAS 低於損益平衡點',
-    desc: `當前 ROAS ${m.roas.toFixed(2)}x 低於損益平衡 ${m.beRoas.toFixed(2)}x。立即行動：暫停表現差的廣告組、提高 AOV（加購推薦）、考慮降低 COGS 或提高售價。`,
-    impact: `需將 ROAS 提升 ${((m.beRoas - m.roas)/m.roas*100).toFixed(0)}% 才能達到損益平衡`
-  });
-  if (tips.length === 0) tips.push({
-    icon: '✅', title: '廣告表現良好',
-    desc: '您的各項指標均在健康範圍內。下一步建議：進行 A/B 測試尋找更高天花板、考慮提高預算規模（+20-30%/週）、開發 Retargeting 受眾提升整體效率。',
-    impact: '持續測試、逐步擴量是維持高 ROAS 的關鍵'
-  });
-  let html = '';
-  tips.forEach(t => {
-    html += `<div class="tip-item">
+  document.getElementById('tips').innerHTML = tips.map(t => `
+    <div class="tip">
       <div class="tip-icon">${t.icon}</div>
       <div>
         <div class="tip-title">${t.title}</div>
         <div class="tip-desc">${t.desc}</div>
-        <div class="tip-impact">▶ ${t.impact}</div>
+        ${t.impact ? `<div class="tip-impact">${t.impact}</div>` : ''}
       </div>
-    </div>`;
-  });
-  el('tipsContainer').innerHTML = html;
+    </div>
+  `).join('');
 }
 
-let skipScenarioRebuild = false;
-function calc(skipScenario = false) {
-  const p = {
-    budget: v('budget'), cpm: v('cpm'), ctr: v('ctr'),
-    lcvr: v('lcvr'), checkout: v('checkout'), purchase: v('purchase'),
-    aov: v('aov'), cogs: v('cogs')
-  };
-  const m = calcMetrics(p);
-  el('cpcDisplay').value = m.cpc.toFixed(2);
-  updateKPI(m);
-  updateFunnel(m, p);
-  updateGauge(m.roas);
-  updateBETable(p);
-  if (!skipScenario) updateScenarios(p, m);
-  updateTips(m, p);
+function renderEcomTips(roas, clicks, lpviews, purchases, cvr, cpm, aov, profit, spend) {
+  let tips = [];
+
+  if (roas < 2) {
+    tips.push({
+      icon: '🚨',
+      title: 'ROAS 低於 2x，廣告目前可能虧損',
+      desc: '建議暫停表現差的廣告組合，集中預算在 ROAS 最高的廣告上。同時提高 AOV（組合包、加購）。',
+      impact: '提高 AOV 10% = ROAS 直接提升 10%'
+    });
+  }
+
+  if (cvr < 1 && lpviews > 0) {
+    tips.push({
+      icon: '🛒',
+      title: '著陸頁 CVR 低於 1%，商品頁需要優化',
+      desc: '確保：主圖吸睛、價格清晰、加入社會證明（評論/買家秀）、結帳按鈕在第一螢幕。',
+      impact: 'CVR 從 1% 提升到 2% = 購買量翻倍，ROAS 翻倍'
+    });
+  }
+
+  if (cpm > 200) {
+    tips.push({
+      icon: '💰',
+      title: 'CPM 偏高（' + fmtNT(cpm,0) + '）',
+      desc: '嘗試 Reels 版位、擴大受眾、或改用「自動版位」讓 Meta 找最便宜的觸及。',
+      impact: '降低 CPM 30% = 相同預算多觸及 30% 用戶'
+    });
+  }
+
+  if (profit < 0 && purchases > 0) {
+    tips.push({
+      icon: '⚠️',
+      title: '目前淨利為負，確認成本率是否正確',
+      desc: '請確認商品成本率設定是否正確。若數據正確，代表廣告費用超過毛利，需提高客單價或降低 CPA。',
+      impact: '損益平衡 ROAS = 1 ÷ (1 − 成本率)'
+    });
+  }
+
+  if (tips.length === 0 && roas >= 3) {
+    tips.push({
+      icon: '🚀',
+      title: 'ROAS 達標！可以考慮放大預算',
+      desc: '每次加預算幅度不超過 20–30%，讓演算法慢慢適應。避免一次大幅調整導致學習期重啟。',
+      impact: '放大方式：複製表現好的廣告組合並提高預算'
+    });
+  }
+
+  if (tips.length === 0) {
+    tips.push({
+      icon: '📊',
+      title: '持續監控這三個核心指標',
+      desc: 'CPM（受眾競爭）→ CTR（素材吸引力）→ CVR（商品頁說服力）。任一步驟掉分都會拉低 ROAS。',
+      impact: ''
+    });
+  }
+
+  document.getElementById('tips').innerHTML = tips.map(t => `
+    <div class="tip">
+      <div class="tip-icon">${t.icon}</div>
+      <div>
+        <div class="tip-title">${t.title}</div>
+        <div class="tip-desc">${t.desc}</div>
+        ${t.impact ? `<div class="tip-impact">${t.impact}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleGuide() {
+  const btn = document.getElementById('guideToggle');
+  const body = document.getElementById('guideBody');
+  btn.classList.toggle('open');
+  body.classList.toggle('show');
 }
 
 // Init
-resetDefaults();
+setMode('traffic');
 </script>
 </body>
 </html>
