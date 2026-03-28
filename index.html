@@ -617,7 +617,7 @@ function renderFunnel(steps) {
   let html = '';
   for (let i = 0; i < steps.length; i++) {
     const s = steps[i];
-    const pct = Math.max((s.val / max) * 100, 2);
+    const pct = Math.min(Math.max((s.val / max) * 100, 2), 100);
     const numStr = s.val >= 1000 ? fmt(s.val) : s.val;
     html += `
       <div class="funnel-step">
