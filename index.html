@@ -22,9 +22,15 @@
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 24px 16px; }
 .container { max-width: 1100px; margin: 0 auto; }
 
-/* Header */
 h1 { text-align: center; font-size: 1.7rem; font-weight: 700; background: linear-gradient(135deg, #0866FF, #64ffda); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
-.subtitle { text-align: center; color: var(--muted); font-size: 0.85rem; margin-bottom: 24px; }
+.subtitle { text-align: center; color: var(--muted); font-size: 0.85rem; margin-bottom: 18px; }
+
+/* Date range */
+.date-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.date-row label { font-size: 0.8rem; color: var(--muted); }
+.date-input { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.85rem; padding: 7px 12px; outline: none; }
+.date-input:focus { border-color: var(--primary); }
+.date-sep { color: var(--muted); font-size: 0.85rem; }
 
 /* Mode toggle */
 .mode-toggle { display: flex; gap: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 4px; max-width: 400px; margin: 0 auto 28px; }
@@ -41,11 +47,16 @@ h1 { text-align: center; font-size: 1.7rem; font-weight: 700; background: linear
 .card-title .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
 .card-title .dot.green { background: var(--accent); }
 .card-title .dot.yellow { background: var(--warning); }
+.card-title .dot.orange { background: #f97316; }
+
+/* Section label within card */
+.section-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 14px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
 
 /* Input fields */
 .field { margin-bottom: 12px; }
 .field-label { font-size: 0.8rem; color: var(--muted); margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
-.field-hint { font-size: 0.7rem; background: rgba(8,102,255,0.12); color: #6699ff; border: 1px solid rgba(8,102,255,0.25); padding: 1px 6px; border-radius: 4px; }
+.field-hint { font-size: 0.7rem; background: rgba(8,102,255,0.12); color: #6699ff; border: 1px solid rgba(8,102,255,0.25); padding: 1px 6px; border-radius: 4px; white-space: nowrap; }
+.field-hint.yellow { background: rgba(249,115,22,0.1); color: #fb923c; border-color: rgba(249,115,22,0.25); }
 .field-hint.green { background: rgba(100,255,218,0.1); color: var(--accent); border-color: rgba(100,255,218,0.25); }
 .input-wrap { display: flex; align-items: center; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 0 12px; transition: border-color 0.2s; }
 .input-wrap:focus-within { border-color: var(--primary); }
@@ -55,6 +66,7 @@ h1 { text-align: center; font-size: 1.7rem; font-weight: 700; background: linear
 
 /* Auto-computed metrics */
 .auto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.auto-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px; }
 .auto-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 9px; padding: 12px 14px; }
 .auto-label { font-size: 0.7rem; color: var(--muted); margin-bottom: 4px; }
 .auto-value { font-size: 1.25rem; font-weight: 700; color: var(--accent); }
@@ -69,8 +81,8 @@ h1 { text-align: center; font-size: 1.7rem; font-weight: 700; background: linear
 /* Funnel */
 .funnel-step { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
 .funnel-label { font-size: 0.75rem; color: var(--muted); width: 100px; flex-shrink: 0; }
-.funnel-bar-wrap { flex: 1; }
-.funnel-bar { height: 30px; border-radius: 6px; display: flex; align-items: center; padding: 0 10px; font-size: 0.78rem; font-weight: 600; color: #fff; transition: width 0.6s ease; min-width: 36px; position: relative; overflow: hidden; }
+.funnel-bar-wrap { flex: 1; overflow: hidden; border-radius: 6px; }
+.funnel-bar { height: 30px; border-radius: 6px; display: flex; align-items: center; padding: 0 10px; font-size: 0.78rem; font-weight: 600; color: #fff; transition: width 0.6s ease; min-width: 36px; max-width: 100%; position: relative; overflow: hidden; }
 .funnel-bar::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 40%; background: rgba(255,255,255,0.1); border-radius: 6px 6px 0 0; }
 .funnel-num { font-size: 0.75rem; color: var(--muted); width: 80px; text-align: right; flex-shrink: 0; }
 .funnel-arrow { font-size: 0.7rem; color: var(--muted); margin: 2px 0 2px 110px; }
@@ -100,22 +112,10 @@ h1 { text-align: center; font-size: 1.7rem; font-weight: 700; background: linear
 .tip-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.5; }
 .tip-impact { font-size: 0.7rem; color: var(--accent); margin-top: 4px; }
 
-/* Pixel Guide */
-.guide-toggle { width: 100%; padding: 14px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 0.9rem; font-weight: 600; cursor: pointer; text-align: left; display: flex; justify-content: space-between; align-items: center; transition: border-color 0.2s; margin-bottom: 4px; }
-.guide-toggle:hover { border-color: var(--primary); }
-.guide-toggle .arrow { transition: transform 0.3s; font-size: 0.8rem; }
-.guide-toggle.open .arrow { transform: rotate(180deg); }
-.guide-body { display: none; background: var(--surface); border: 1px solid var(--border); border-top: none; border-radius: 0 0 12px 12px; padding: 20px; margin-bottom: 16px; }
-.guide-body.show { display: block; }
-
-.step { display: flex; gap: 16px; margin-bottom: 24px; }
-.step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: #fff; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.step-content h3 { font-size: 0.92rem; font-weight: 700; margin-bottom: 6px; }
-.step-content p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; margin-bottom: 6px; }
-.step-content .path { font-family: monospace; background: var(--surface2); border: 1px solid var(--border); padding: 6px 10px; border-radius: 6px; font-size: 0.78rem; color: var(--accent); display: block; margin: 6px 0; }
-.step-content ul { font-size: 0.8rem; color: var(--muted); line-height: 1.8; padding-left: 16px; margin-bottom: 6px; }
-.step-content .tag { display: inline-block; background: rgba(100,255,218,0.1); color: var(--accent); border: 1px solid rgba(100,255,218,0.25); border-radius: 4px; padding: 2px 7px; font-size: 0.75rem; margin: 2px; }
-.step-content .warn-box { background: rgba(255,187,51,0.08); border: 1px solid rgba(255,187,51,0.25); border-radius: 8px; padding: 10px 14px; font-size: 0.78rem; color: var(--warning); margin-top: 8px; }
+/* Export button */
+.export-row { display: flex; justify-content: center; margin-top: 8px; margin-bottom: 24px; }
+.export-btn { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--border); color: var(--accent); font-size: 0.85rem; font-weight: 600; padding: 10px 24px; border-radius: 9px; cursor: pointer; transition: all 0.2s; }
+.export-btn:hover { background: rgba(100,255,218,0.08); border-color: var(--accent); }
 
 /* Hidden by mode */
 .ecom-only, .traffic-only { display: none; }
@@ -126,6 +126,14 @@ h1 { text-align: center; font-size: 1.7rem; font-weight: 700; background: linear
   <h1>Meta Ads 銷售漏斗計算器</h1>
   <p class="subtitle">對照 Meta 後台直接填入數字，自動換算 CPM、CTR、ROAS</p>
 
+  <!-- Date range -->
+  <div class="date-row">
+    <label>記錄區間</label>
+    <input type="date" id="dateStart" class="date-input">
+    <span class="date-sep">至</span>
+    <input type="date" id="dateEnd" class="date-input">
+  </div>
+
   <!-- Mode toggle -->
   <div class="mode-toggle">
     <button class="mode-btn active" onclick="setMode('traffic')" id="btn-traffic">引流模式（Portaly）</button>
@@ -135,73 +143,58 @@ h1 { text-align: center; font-size: 1.7rem; font-weight: 700; background: linear
   <div class="layout">
     <!-- LEFT: Input Panel -->
     <div>
+
       <!-- Meta 後台數據 -->
       <div class="card">
         <div class="card-title"><div class="dot"></div> Meta 後台數據（直接填）</div>
 
         <div class="field">
-          <div class="field-label">
-            花費金額
-            <span class="field-hint">廣告後台 → 花費金額</span>
-          </div>
+          <div class="field-label">花費金額 <span class="field-hint">廣告後台 → 花費金額</span></div>
           <div class="input-wrap">
             <span class="unit">NT$</span>&nbsp;
-            <input type="number" id="spend" value="504" min="0" oninput="calc()">
+            <input type="number" id="spend" value="" placeholder="0" min="0" oninput="calc()">
           </div>
         </div>
 
         <div class="field">
-          <div class="field-label">
-            曝光次數
-            <span class="field-hint">廣告後台 → 曝光次數</span>
-          </div>
+          <div class="field-label">曝光次數 <span class="field-hint">廣告後台 → 曝光次數</span></div>
           <div class="input-wrap">
-            <input type="number" id="impressions" value="7370" min="1" oninput="calc()">
+            <input type="number" id="impressions" value="" placeholder="0" min="1" oninput="calc()">
             <span class="unit">次</span>
           </div>
         </div>
 
         <div class="field">
-          <div class="field-label">
-            觸及人數
-            <span class="field-hint">廣告後台 → 觸及人數</span>
-          </div>
+          <div class="field-label">觸及人數 <span class="field-hint">廣告後台 → 觸及人數</span></div>
           <div class="input-wrap">
-            <input type="number" id="reach" value="4200" min="1" oninput="calc()">
+            <input type="number" id="reach" value="" placeholder="0" min="1" oninput="calc()">
             <span class="unit">人</span>
           </div>
         </div>
 
         <div class="field">
-          <div class="field-label">
-            連結點擊次數
-            <span class="field-hint">廣告後台 → 連結點擊次數</span>
-          </div>
+          <div class="field-label">連結點擊次數 <span class="field-hint">廣告後台 → 連結點擊次數</span></div>
           <div class="input-wrap">
-            <input type="number" id="clicks" value="164" min="0" oninput="calc()">
+            <input type="number" id="clicks" value="" placeholder="0" min="0" oninput="calc()">
             <span class="unit">次</span>
           </div>
         </div>
 
         <div class="field">
-          <div class="field-label">
-            著陸頁瀏覽次數
-            <span class="field-hint">廣告後台 → 著陸頁瀏覽次數</span>
-          </div>
+          <div class="field-label">著陸頁瀏覽次數 <span class="field-hint">廣告後台 → 著陸頁瀏覽次數</span></div>
           <div class="input-wrap">
-            <input type="number" id="lpviews" value="150" min="0" oninput="calc()">
+            <input type="number" id="lpviews" value="" placeholder="0" min="0" oninput="calc()">
             <span class="unit">次</span>
           </div>
         </div>
 
-        <!-- Auto-computed from Meta data -->
         <div class="sep"></div>
-        <div class="card-title" style="margin-bottom:10px"><div class="dot green"></div> 自動換算結果</div>
+        <div class="card-title" style="margin-bottom:10px"><div class="dot green"></div> 自動換算</div>
         <div class="auto-grid">
           <div class="auto-card">
             <div class="auto-label">CPM（每千次曝光費用）</div>
             <div class="auto-value" id="cpm">—</div>
-            <div class="auto-sub">台灣電商基準：NT$60–150</div>
+            <div class="auto-sub">台灣基準：NT$60–150</div>
           </div>
           <div class="auto-card">
             <div class="auto-label">CPC（每次點擊費用）</div>
@@ -225,39 +218,74 @@ h1 { text-align: center; font-size: 1.7rem; font-weight: 700; background: linear
       <div class="card traffic-only" id="trafficCard">
         <div class="card-title"><div class="dot yellow"></div> Portaly 後台數據</div>
 
+        <div class="section-label">數據分析 → 網頁數據</div>
+
         <div class="field">
-          <div class="field-label">
-            瀏覽人數
-            <span class="field-hint">Portaly → 網頁數據 → 瀏覽人數</span>
-          </div>
+          <div class="field-label">瀏覽人數 <span class="field-hint yellow">網頁數據 → 瀏覽人數</span></div>
           <div class="input-wrap">
-            <input type="number" id="plyVisitors" value="180" min="0" oninput="calc()">
+            <input type="number" id="plyVisitors" value="" placeholder="0" min="0" oninput="calc()">
             <span class="unit">人</span>
           </div>
         </div>
 
         <div class="field">
-          <div class="field-label">
-            點擊（點了 Portaly 內的連結）
-            <span class="field-hint">Portaly → 網頁數據 → 點擊</span>
-          </div>
+          <div class="field-label">點擊（頁面內連結點擊） <span class="field-hint yellow">網頁數據 → 點擊</span></div>
           <div class="input-wrap">
-            <input type="number" id="plyClicks" value="6" min="0" oninput="calc()">
+            <input type="number" id="plyClicks" value="" placeholder="0" min="0" oninput="calc()">
             <span class="unit">次</span>
           </div>
         </div>
 
+        <div class="section-label">變現工具 → 商品管理 → 營收總覽（同一日期區間）</div>
+
+        <div class="field">
+          <div class="field-label">銷售量 <span class="field-hint yellow">營收總覽 → 銷售量</span></div>
+          <div class="input-wrap">
+            <input type="number" id="plySales" value="" placeholder="0" min="0" oninput="calc()">
+            <span class="unit">筆</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">總銷售額 <span class="field-hint yellow">營收總覽 → 總銷售額</span></div>
+          <div class="input-wrap">
+            <span class="unit">NT$</span>&nbsp;
+            <input type="number" id="plyRevenue" value="" placeholder="0" min="0" oninput="calc()">
+          </div>
+        </div>
+
         <div class="sep"></div>
+        <div class="card-title" style="margin-bottom:10px"><div class="dot orange"></div> 自動換算</div>
         <div class="auto-grid">
           <div class="auto-card">
             <div class="auto-label">Portaly CTR</div>
             <div class="auto-value warn" id="plyCtr">—</div>
-            <div class="auto-sub">點擊 ÷ 瀏覽人數</div>
+            <div class="auto-sub">點擊 ÷ 瀏覽人數（基準 ≥ 5%）</div>
           </div>
           <div class="auto-card">
             <div class="auto-label">廣告→Portaly 到達率</div>
             <div class="auto-value warn" id="arrivalRate">—</div>
             <div class="auto-sub">Portaly瀏覽 ÷ 著陸頁瀏覽</div>
+          </div>
+          <div class="auto-card">
+            <div class="auto-label">ROAS（手動對帳）</div>
+            <div class="auto-value" id="plyRoas">—</div>
+            <div class="auto-sub">總銷售額 ÷ Meta 花費</div>
+          </div>
+          <div class="auto-card">
+            <div class="auto-label">每筆購買成本（CPA）</div>
+            <div class="auto-value blue" id="plyCpa">—</div>
+            <div class="auto-sub">Meta 花費 ÷ 銷售量</div>
+          </div>
+          <div class="auto-card">
+            <div class="auto-label">平均客單價</div>
+            <div class="auto-value blue" id="plyAov">—</div>
+            <div class="auto-sub">總銷售額 ÷ 銷售量</div>
+          </div>
+          <div class="auto-card">
+            <div class="auto-label">訪客→購買 CVR</div>
+            <div class="auto-value warn" id="plyCvr">—</div>
+            <div class="auto-sub">銷售量 ÷ Portaly 瀏覽人數</div>
           </div>
         </div>
       </div>
@@ -267,32 +295,23 @@ h1 { text-align: center; font-size: 1.7rem; font-weight: 700; background: linear
         <div class="card-title"><div class="dot green"></div> 購買數據（Meta 後台 → 轉換）</div>
 
         <div class="field">
-          <div class="field-label">
-            購買次數
-            <span class="field-hint green">後台 → 購買（次數）</span>
-          </div>
+          <div class="field-label">購買次數 <span class="field-hint green">後台 → 購買（次數）</span></div>
           <div class="input-wrap">
-            <input type="number" id="purchases" value="5" min="0" oninput="calc()">
+            <input type="number" id="purchases" value="" placeholder="0" min="0" oninput="calc()">
             <span class="unit">次</span>
           </div>
         </div>
 
         <div class="field">
-          <div class="field-label">
-            購買轉換值（總營收）
-            <span class="field-hint green">後台 → 購買轉換值</span>
-          </div>
+          <div class="field-label">購買轉換值（總營收） <span class="field-hint green">後台 → 購買轉換值</span></div>
           <div class="input-wrap">
             <span class="unit">NT$</span>&nbsp;
-            <input type="number" id="revenue" value="3500" min="0" oninput="calc()">
+            <input type="number" id="revenue" value="" placeholder="0" min="0" oninput="calc()">
           </div>
         </div>
 
         <div class="field">
-          <div class="field-label">
-            商品成本率
-            <span class="field-hint green">COGS ÷ 售價（例如 40%）</span>
-          </div>
+          <div class="field-label">商品成本率 <span class="field-hint green">COGS ÷ 售價（例如 40%）</span></div>
           <div class="input-wrap">
             <input type="number" id="cogs" value="40" min="0" max="100" oninput="calc()">
             <span class="unit">%</span>
@@ -302,7 +321,7 @@ h1 { text-align: center; font-size: 1.7rem; font-weight: 700; background: linear
         <div class="sep"></div>
         <div class="auto-grid">
           <div class="auto-card">
-            <div class="auto-label">ROAS（廣告投資報酬率）</div>
+            <div class="auto-label">ROAS</div>
             <div class="auto-value" id="roas">—</div>
             <div class="auto-sub">目標：≥ 3.0x</div>
           </div>
@@ -347,96 +366,28 @@ h1 { text-align: center; font-size: 1.7rem; font-weight: 700; background: linear
     </div>
   </div>
 
-  <!-- Pixel Guide Accordion -->
-  <button class="guide-toggle" id="guideToggle" onclick="toggleGuide()">
-    <span>📘 教學：把廣告從 Portaly 改成直接連到商品頁 + 安裝 Meta Pixel</span>
-    <span class="arrow">▼</span>
-  </button>
-  <div class="guide-body" id="guideBody">
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-content">
-        <h3>建立 Meta Pixel</h3>
-        <p>Meta Pixel 是一段追蹤碼，裝在你的商品網站後，Meta 就能追蹤「誰看了廣告 → 誰真的買了」，並自動計算 ROAS。</p>
-        <span class="path">Meta 廣告後台 → 活動管理工具 → 資料來源 → Pixel → 建立 Pixel</span>
-        <ul>
-          <li>命名後按「建立」，你會拿到一串 Pixel ID（15 位數字）</li>
-          <li>選擇安裝方式：如果有 Shopify / Wix / Shopline 等平台，選「合作夥伴整合」最簡單</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-content">
-        <h3>把 Pixel 安裝到商品網站</h3>
-        <p>依你的電商平台選擇對應方式：</p>
-        <div>
-          <span class="tag">Shopify</span> 後台 → 線上商店 → 偏好設定 → Facebook Pixel ID 貼上即可
-        </div>
-        <div style="margin-top:8px">
-          <span class="tag">Shopline</span> 後台 → 設定 → 行銷工具 → Meta Pixel → 貼上 ID
-        </div>
-        <div style="margin-top:8px">
-          <span class="tag">自架網站</span> 把以下程式碼貼在 &lt;head&gt; 內：
-        </div>
-        <span class="path">&lt;script&gt; !function(f,b,e,v,n,t,s) ... fbq('init', '你的Pixel ID'); fbq('track', 'PageView'); &lt;/script&gt;</span>
-        <p>完整程式碼在 Pixel 建立後的「手動安裝」頁面可以複製。</p>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-content">
-        <h3>設定「購買」轉換事件</h3>
-        <p>Pixel 裝好後，還需要告訴 Meta「這個頁面 = 購買完成」，它才會記錄 ROAS。</p>
-        <ul>
-          <li>Shopify / Shopline 平台：購買事件通常自動追蹤，無需額外設定</li>
-          <li>自架網站：在訂單完成頁（感謝頁）加上：</li>
-        </ul>
-        <span class="path">fbq('track', 'Purchase', &#123;value: 訂單金額, currency: 'TWD'&#125;);</span>
-        <p>設定後在 Meta 後台 → 活動管理工具 → 測試事件，可以即時確認是否偵測到。</p>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-num">4</div>
-      <div class="step-content">
-        <h3>把廣告連結從 Portaly 改成直接連到商品頁</h3>
-        <p>這是最關鍵的一步。現在的流程是：</p>
-        <span class="path">Meta 廣告 → Portaly（中繼頁）→ 商品頁</span>
-        <p>改成：</p>
-        <span class="path">Meta 廣告 → 商品頁（直接）</span>
-        <ul>
-          <li>進入廣告後台，點選廣告組合 → 編輯廣告</li>
-          <li>找到「目的地 URL」或「網站 URL」欄位</li>
-          <li>把 Portaly 連結換成你的商品頁網址（例如 yourshop.com/products/xxx）</li>
-          <li>廣告目標改成「轉換」→ 優化事件選「購買」</li>
-        </ul>
-        <div class="warn-box">
-          ⚠️ 注意：Portaly 是集合多個連結的頁面，適合 Instagram 首頁連結，但廣告應該直接連到商品頁，減少一個跳轉步驟，能明顯提升轉換率。
-        </div>
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-num">5</div>
-      <div class="step-content">
-        <h3>修改廣告系列目標</h3>
-        <p>目前你的廣告可能是「流量」目標（只優化點擊），改成「銷售」目標後 Meta 會把廣告推給更可能購買的人。</p>
-        <span class="path">建立廣告系列 → 目標選「銷售」→ 轉換位置選「網站」→ 優化事件選「購買」</span>
-        <ul>
-          <li>新的 Pixel 前期資料不足，建議先讓它跑 7–14 天學習期</li>
-          <li>學習期間預算不要大幅更動，讓演算法穩定收集資料</li>
-          <li>每天至少 1 次購買轉換，演算法才能快速學習（預算參考：每日 NT$300–500 起）</li>
-        </ul>
-      </div>
-    </div>
+  <!-- Export CSV -->
+  <div class="export-row">
+    <button class="export-btn" onclick="exportCSV()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      匯出 CSV（貼入 Notion 記錄）
+    </button>
   </div>
+
 </div>
 
 <script>
 let currentMode = 'traffic';
+
+// Set default date range (last 7 days)
+(function() {
+  const today = new Date();
+  const weekAgo = new Date(today);
+  weekAgo.setDate(today.getDate() - 7);
+  const fmt = d => d.toISOString().split('T')[0];
+  document.getElementById('dateEnd').value = fmt(today);
+  document.getElementById('dateStart').value = fmt(weekAgo);
+})();
 
 function setMode(m) {
   currentMode = m;
@@ -447,28 +398,15 @@ function setMode(m) {
   calc();
 }
 
+function v(id) { return +document.getElementById(id).value || 0; }
 function fmt(n, dec = 0) {
-  if (!isFinite(n) || isNaN(n)) return '—';
+  if (!isFinite(n) || isNaN(n) || n === 0) return '—';
   return n.toLocaleString('zh-TW', { minimumFractionDigits: dec, maximumFractionDigits: dec });
 }
-
 function fmtNT(n, dec = 0) {
-  if (!isFinite(n) || isNaN(n)) return '—';
-  return 'NT$' + fmt(n, dec);
+  if (!isFinite(n) || isNaN(n) || n === 0) return '—';
+  return 'NT$' + n.toLocaleString('zh-TW', { minimumFractionDigits: dec, maximumFractionDigits: dec });
 }
-
-function colorClass(val, good, warn) {
-  if (val >= good) return 'c-green';
-  if (val >= warn) return 'c-warn';
-  return 'c-danger';
-}
-
-function badgeClass(val, good, warn) {
-  if (val >= good) return 'badge-g';
-  if (val >= warn) return 'badge-w';
-  return 'badge-r';
-}
-
 function setAutoVal(id, text, cls) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -477,88 +415,92 @@ function setAutoVal(id, text, cls) {
 }
 
 function calc() {
-  const spend = +document.getElementById('spend').value || 0;
-  const impressions = +document.getElementById('impressions').value || 1;
-  const reach = +document.getElementById('reach').value || 1;
-  const clicks = +document.getElementById('clicks').value || 0;
-  const lpviews = +document.getElementById('lpviews').value || 0;
+  const spend = v('spend');
+  const impressions = v('impressions') || 1;
+  const reach = v('reach') || 1;
+  const clicks = v('clicks');
+  const lpviews = v('lpviews');
 
-  // Auto-compute Meta metrics
-  const cpm = spend / impressions * 1000;
+  const cpm = spend > 0 && impressions > 1 ? spend / impressions * 1000 : 0;
   const cpc = clicks > 0 ? spend / clicks : 0;
-  const ctr = clicks / impressions * 100;
-  const freq = impressions / reach;
+  const ctr = clicks > 0 ? clicks / impressions * 100 : 0;
+  const freq = reach > 1 ? impressions / reach : 0;
 
-  const cpmCls = cpm <= 150 ? '' : cpm <= 250 ? 'warn' : 'danger';
-  const cpcCls = cpc <= 20 ? '' : 'warn';
-  const ctrCls = ctr >= 1 ? '' : ctr >= 0.5 ? 'warn' : 'danger';
-  const freqCls = freq >= 1.5 && freq <= 3 ? '' : freq > 3 ? 'warn' : '';
-
-  setAutoVal('cpm', spend > 0 ? fmtNT(cpm, 1) : '—', cpmCls);
-  setAutoVal('cpc', clicks > 0 ? fmtNT(cpc, 1) : '—', cpcCls);
-  setAutoVal('ctr', clicks > 0 ? fmt(ctr, 2) + '%' : '—', ctrCls);
-  setAutoVal('freq', fmtNT === undefined ? '—' : fmt(freq, 2), freqCls);
+  setAutoVal('cpm', cpm > 0 ? fmtNT(cpm, 1) : '—', cpm > 250 ? 'danger' : cpm > 150 ? 'warn' : '');
+  setAutoVal('cpc', cpc > 0 ? fmtNT(cpc, 1) : '—', cpc > 20 ? 'warn' : '');
+  setAutoVal('ctr', ctr > 0 ? fmt(ctr, 2) + '%' : '—', ctr < 0.5 && ctr > 0 ? 'danger' : ctr < 1 && ctr > 0 ? 'warn' : '');
+  setAutoVal('freq', freq > 0 ? fmt(freq, 2) : '—', freq > 3 ? 'warn' : '');
 
   if (currentMode === 'traffic') calcTraffic(spend, impressions, clicks, lpviews);
   else calcEcom(spend, impressions, clicks, lpviews);
 }
 
 function calcTraffic(spend, impressions, clicks, lpviews) {
-  const plyVisitors = +document.getElementById('plyVisitors').value || 0;
-  const plyClicks = +document.getElementById('plyClicks').value || 0;
+  const plyVisitors = v('plyVisitors');
+  const plyClicks = v('plyClicks');
+  const plySales = v('plySales');
+  const plyRevenue = v('plyRevenue');
 
   const plyCtr = plyVisitors > 0 ? plyClicks / plyVisitors * 100 : 0;
   const arrivalRate = lpviews > 0 && plyVisitors > 0 ? plyVisitors / lpviews * 100 : 0;
+  const plyRoas = spend > 0 && plyRevenue > 0 ? plyRevenue / spend : 0;
+  const plyCpa = plySales > 0 && spend > 0 ? spend / plySales : 0;
+  const plyAov = plySales > 0 && plyRevenue > 0 ? plyRevenue / plySales : 0;
+  const plyCvr = plyVisitors > 0 && plySales > 0 ? plySales / plyVisitors * 100 : 0;
 
-  setAutoVal('plyCtr', plyVisitors > 0 ? fmt(plyCtr, 1) + '%' : '—', plyCtr >= 5 ? '' : plyCtr >= 2 ? 'warn' : 'danger');
-  setAutoVal('arrivalRate', arrivalRate > 0 ? fmt(arrivalRate, 1) + '%' : '—', '');
+  setAutoVal('plyCtr', plyCtr > 0 ? fmt(plyCtr, 1) + '%' : '—', plyCtr < 2 && plyCtr > 0 ? 'danger' : plyCtr < 5 && plyCtr > 0 ? 'warn' : '');
+  setAutoVal('arrivalRate', arrivalRate > 0 ? fmt(arrivalRate, 1) + '%' : '—', arrivalRate < 70 && arrivalRate > 0 ? 'warn' : '');
+  setAutoVal('plyRoas', plyRoas > 0 ? fmt(plyRoas, 2) + 'x' : '—', plyRoas < 1 && plyRoas > 0 ? 'danger' : plyRoas < 3 && plyRoas > 0 ? 'warn' : '');
+  setAutoVal('plyCpa', plyCpa > 0 ? fmtNT(plyCpa, 0) : '—', 'blue');
+  setAutoVal('plyAov', plyAov > 0 ? fmtNT(plyAov, 0) : '—', 'blue');
+  setAutoVal('plyCvr', plyCvr > 0 ? fmt(plyCvr, 2) + '%' : '—', plyCvr < 1 && plyCvr > 0 ? 'warn' : '');
 
-  // Funnel: Impressions → Clicks → LP Views → Portaly Visitors → Portaly Clicks
+  // Funnel
   const steps = [
-    { label: '曝光次數', val: impressions, color: '#0866FF' },
+    { label: '曝光次數', val: impressions > 1 ? impressions : 0, color: '#0866FF' },
     { label: '連結點擊', val: clicks, color: '#1877f2' },
     { label: '著陸頁瀏覽', val: lpviews, color: '#0052cc' },
     { label: 'Portaly 瀏覽', val: plyVisitors, color: '#f59e0b' },
-    { label: 'Portaly 點擊', val: plyClicks, color: '#10b981' },
-  ];
+    { label: 'Portaly 點擊', val: plyClicks, color: '#f97316' },
+    { label: '購買（手動）', val: plySales, color: '#10b981' },
+  ].filter(s => s.val > 0);
   renderFunnel(steps);
 
   // KPIs
-  const cpm = spend / impressions * 1000;
-  const cpc = clicks > 0 ? spend / clicks : 0;
-  const costPerLPView = lpviews > 0 ? spend / lpviews : 0;
-  const costPerPlyClick = plyClicks > 0 ? spend / plyClicks : 0;
+  const cpm = spend > 0 ? spend / impressions * 1000 : 0;
+  const costPerLPView = lpviews > 0 && spend > 0 ? spend / lpviews : 0;
+  const costPerPlyClick = plyClicks > 0 && spend > 0 ? spend / plyClicks : 0;
 
   document.getElementById('kpiGrid').innerHTML = `
     <div class="kpi-card">
+      <div class="kpi-label">ROAS（手動對帳）</div>
+      <div class="kpi-value ${plyRoas >= 3 ? 'c-green' : plyRoas >= 1 ? 'c-warn' : plyRoas > 0 ? 'c-danger' : ''}">${plyRoas > 0 ? fmt(plyRoas,2)+'x' : '—'}</div>
+      <div class="kpi-sub">${plyRoas >= 3 ? '<span class="badge badge-g">達標</span>' : plyRoas >= 1 ? '<span class="badge badge-w">待優化</span>' : plyRoas > 0 ? '<span class="badge badge-r">虧損</span>' : ''} 目標 ≥ 3.0x</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">每筆購買成本（CPA）</div>
+      <div class="kpi-value c-blue">${plyCpa > 0 ? fmtNT(plyCpa,0) : '—'}</div>
+      <div class="kpi-sub">需低於客單價才有利潤</div>
+    </div>
+    <div class="kpi-card">
       <div class="kpi-label">每次著陸頁瀏覽費用</div>
-      <div class="kpi-value c-blue">${lpviews > 0 ? fmtNT(costPerLPView, 1) : '—'}</div>
+      <div class="kpi-value c-blue">${costPerLPView > 0 ? fmtNT(costPerLPView,1) : '—'}</div>
       <div class="kpi-sub">Cost Per Landing Page View</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-label">每次 Portaly 點擊費用</div>
-      <div class="kpi-value c-warn">${plyClicks > 0 ? fmtNT(costPerPlyClick, 0) : '—'}</div>
-      <div class="kpi-sub">Cost Per Portaly Click</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">廣告 → Portaly 流失率</div>
-      <div class="kpi-value c-warn">${lpviews > 0 && plyVisitors > 0 ? fmt((1 - plyVisitors/lpviews)*100, 1) + '%' : '—'}</div>
-      <div class="kpi-sub">中繼頁造成的跳出</div>
-    </div>
-    <div class="kpi-card">
       <div class="kpi-label">Portaly CTR</div>
-      <div class="kpi-value ${plyVisitors > 0 && plyCtr < 3 ? 'c-danger' : 'c-blue'}">${plyVisitors > 0 ? fmt(plyCtr, 1) + '%' : '—'}</div>
+      <div class="kpi-value ${plyCtr < 3 && plyCtr > 0 ? 'c-danger' : plyCtr < 5 && plyCtr > 0 ? 'c-warn' : 'c-blue'}">${plyCtr > 0 ? fmt(plyCtr,1)+'%' : '—'}</div>
       <div class="kpi-sub">點擊 ÷ 瀏覽（基準 ≥ 5%）</div>
     </div>
   `;
 
-  renderTrafficTips(spend, clicks, lpviews, plyVisitors, plyClicks, plyCtr, cpm);
+  renderTrafficTips(spend, clicks, lpviews, plyVisitors, plyClicks, plyCtr, cpm, plyRoas, plySales);
 }
 
 function calcEcom(spend, impressions, clicks, lpviews) {
-  const purchases = +document.getElementById('purchases').value || 0;
-  const revenue = +document.getElementById('revenue').value || 0;
-  const cogsRate = +document.getElementById('cogs').value / 100 || 0;
+  const purchases = v('purchases');
+  const revenue = v('revenue');
+  const cogsRate = v('cogs') / 100;
 
   const roas = spend > 0 && revenue > 0 ? revenue / spend : 0;
   const cpa = purchases > 0 ? spend / purchases : 0;
@@ -566,45 +508,41 @@ function calcEcom(spend, impressions, clicks, lpviews) {
   const cogs = revenue * cogsRate;
   const profit = revenue - spend - cogs;
   const cvr = lpviews > 0 && purchases > 0 ? purchases / lpviews * 100 : 0;
-  const cpm = spend / impressions * 1000;
+  const cpm = spend > 0 ? spend / impressions * 1000 : 0;
 
-  const roasCls = roas >= 3 ? '' : roas >= 2 ? 'warn' : 'danger';
-  setAutoVal('roas', roas > 0 ? fmt(roas, 2) + 'x' : '—', roasCls);
-  setAutoVal('cpa', purchases > 0 ? fmtNT(cpa, 0) : '—', '');
-  setAutoVal('aov', purchases > 0 ? fmtNT(aov, 0) : '—', 'blue');
-  const profitCls = profit > 0 ? '' : 'danger';
-  setAutoVal('profit', revenue > 0 ? fmtNT(profit, 0) : '—', profitCls);
+  setAutoVal('roas', roas > 0 ? fmt(roas,2)+'x' : '—', roas < 1 && roas > 0 ? 'danger' : roas < 3 && roas > 0 ? 'warn' : '');
+  setAutoVal('cpa', cpa > 0 ? fmtNT(cpa,0) : '—', '');
+  setAutoVal('aov', aov > 0 ? fmtNT(aov,0) : '—', 'blue');
+  setAutoVal('profit', revenue > 0 ? fmtNT(profit,0) : '—', profit < 0 && revenue > 0 ? 'danger' : '');
 
-  // Funnel
   const steps = [
-    { label: '曝光次數', val: impressions, color: '#0866FF' },
+    { label: '曝光次數', val: impressions > 1 ? impressions : 0, color: '#0866FF' },
     { label: '連結點擊', val: clicks, color: '#1877f2' },
     { label: '著陸頁瀏覽', val: lpviews, color: '#0052cc' },
     { label: '購買次數', val: purchases, color: '#10b981' },
-  ];
+  ].filter(s => s.val > 0);
   renderFunnel(steps);
 
-  // KPI grid
-  const roasLabel = roas >= 3 ? '<span class="badge badge-g">達標</span>' : roas >= 2 ? '<span class="badge badge-w">待優化</span>' : '<span class="badge badge-r">虧損風險</span>';
+  const roasLabel = roas >= 3 ? '<span class="badge badge-g">達標</span>' : roas >= 2 ? '<span class="badge badge-w">待優化</span>' : roas > 0 ? '<span class="badge badge-r">虧損風險</span>' : '';
   document.getElementById('kpiGrid').innerHTML = `
     <div class="kpi-card">
       <div class="kpi-label">ROAS</div>
-      <div class="kpi-value ${roas >= 3 ? 'c-green' : roas >= 2 ? 'c-warn' : 'c-danger'}">${roas > 0 ? fmt(roas, 2) + 'x' : '—'}</div>
+      <div class="kpi-value ${roas >= 3 ? 'c-green' : roas >= 2 ? 'c-warn' : roas > 0 ? 'c-danger' : ''}">${roas > 0 ? fmt(roas,2)+'x' : '—'}</div>
       <div class="kpi-sub">${roasLabel} 目標 ≥ 3.0x</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">CPA（每次購買成本）</div>
-      <div class="kpi-value c-blue">${purchases > 0 ? fmtNT(cpa, 0) : '—'}</div>
+      <div class="kpi-value c-blue">${cpa > 0 ? fmtNT(cpa,0) : '—'}</div>
       <div class="kpi-sub">需低於客單價才有利潤</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">著陸頁 CVR</div>
-      <div class="kpi-value ${cvr >= 2 ? 'c-green' : cvr >= 1 ? 'c-warn' : 'c-danger'}">${cvr > 0 ? fmt(cvr, 2) + '%' : '—'}</div>
+      <div class="kpi-value ${cvr >= 2 ? 'c-green' : cvr >= 1 ? 'c-warn' : cvr > 0 ? 'c-danger' : ''}">${cvr > 0 ? fmt(cvr,2)+'%' : '—'}</div>
       <div class="kpi-sub">基準：1%–3%</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-label">淨利潤</div>
-      <div class="kpi-value ${profit > 0 ? 'c-green' : 'c-danger'}">${revenue > 0 ? fmtNT(profit, 0) : '—'}</div>
+      <div class="kpi-value ${profit > 0 ? 'c-green' : revenue > 0 ? 'c-danger' : ''}">${revenue > 0 ? fmtNT(profit,0) : '—'}</div>
       <div class="kpi-sub">營收 − 廣告費 − COGS</div>
     </div>
   `;
@@ -613,6 +551,10 @@ function calcEcom(spend, impressions, clicks, lpviews) {
 }
 
 function renderFunnel(steps) {
+  if (steps.length === 0) {
+    document.getElementById('funnelWrap').innerHTML = '<div style="color:var(--muted);font-size:0.82rem;text-align:center;padding:20px 0;">填入數據後顯示漏斗</div>';
+    return;
+  }
   const max = steps[0].val || 1;
   let html = '';
   for (let i = 0; i < steps.length; i++) {
@@ -625,7 +567,7 @@ function renderFunnel(steps) {
         <div class="funnel-bar-wrap">
           <div class="funnel-bar" style="width:${pct}%;background:${s.color}">${numStr}</div>
         </div>
-        <div class="funnel-num">${s.val > 0 ? fmt(s.val) + '人/次' : '—'}</div>
+        <div class="funnel-num">${fmt(s.val)}人/次</div>
       </div>`;
     if (i < steps.length - 1 && steps[i+1].val > 0 && s.val > 0) {
       const rate = (steps[i+1].val / s.val * 100).toFixed(1);
@@ -635,53 +577,36 @@ function renderFunnel(steps) {
   document.getElementById('funnelWrap').innerHTML = html;
 }
 
-function renderTrafficTips(spend, clicks, lpviews, plyVisitors, plyClicks, plyCtr, cpm) {
+function renderTrafficTips(spend, clicks, lpviews, plyVisitors, plyClicks, plyCtr, cpm, plyRoas, plySales) {
   let tips = [];
 
-  if (plyCtr < 3 && plyVisitors > 0) {
-    tips.push({
-      icon: '🔗',
-      title: 'Portaly CTR 偏低（' + fmt(plyCtr,1) + '%），建議直接連到商品頁',
-      desc: '每多一個跳轉步驟，就會流失用戶。把廣告連結直接指向商品頁，可減少 20–40% 流失。參考下方「教學」。',
-      impact: '預估效果：著陸頁 CVR 提升 1.5–2 倍'
-    });
+  if (plySales === 0 && plyVisitors > 0) {
+    tips.push({ icon: '🔍', title: '本期間銷售量為 0', desc: '廣告帶來了流量，但沒有成交。可能原因：受眾不精準（會點但不買）、商品頁說服力不足、或廣告目標設為「流量」而非「銷售」。', impact: '建議：先確認廣告目標設定' });
+  }
+
+  if (plyRoas > 0 && plyRoas < 1) {
+    tips.push({ icon: '🚨', title: 'ROAS 低於 1x，廣告費 > 銷售額', desc: '每花 NT$1 廣告費，只帶回 NT$' + fmt(plyRoas,2) + '。先暫停廣告，檢查受眾設定與商品定價。', impact: '損益平衡 ROAS = 1（不含成本），含成本需 ≥ 2–3x' });
+  }
+
+  if (plyCtr < 3 && plyCtr > 0) {
+    tips.push({ icon: '🔗', title: 'Portaly CTR 偏低（' + fmt(plyCtr,1) + '%）', desc: 'Portaly 頁面上只有少數人點了商品連結。可以嘗試：把商品縮圖放大、減少頁面上的其他連結干擾、讓商品排在最上方。', impact: '目標：Portaly CTR ≥ 5%' });
   }
 
   if (lpviews > 0 && plyVisitors > 0 && plyVisitors / lpviews < 0.8) {
-    tips.push({
-      icon: '⚡',
-      title: 'Portaly 頁面流失率高（' + fmt((1 - plyVisitors/lpviews)*100, 1) + '%）',
-      desc: '超過 20% 的人點了廣告卻沒繼續看 Portaly，可能是頁面載入太慢或設計不夠吸睛。',
-      impact: '建議：改用直購連結，或優化 Portaly 首屏視覺'
-    });
+    tips.push({ icon: '⚡', title: 'Portaly 到達率偏低（' + fmt(plyVisitors/lpviews*100,1) + '%）', desc: '部分點了廣告的人沒有成功載入 Portaly 頁面，可能是頁面速度問題或廣告與頁面內容落差太大。', impact: '建議：優化 Portaly 首屏、確認廣告連結正確' });
   }
 
-  if (cpm > 200) {
-    tips.push({
-      icon: '💰',
-      title: 'CPM 偏高（' + fmtNT(cpm,0) + '），受眾競爭激烈',
-      desc: '嘗試擴大受眾或換用 Reels 版位，台灣 Reels CPM 通常比動態消息低 30–50%。',
-      impact: '可嘗試：興趣受眾 → 類似受眾（LAL 1–3%）'
-    });
+  if (cpm > 200 && spend > 0) {
+    tips.push({ icon: '💰', title: 'CPM 偏高（' + fmtNT(cpm,0) + '）', desc: '嘗試 Reels 版位或擴大受眾範圍，台灣 Reels CPM 通常比動態消息低 30–50%。', impact: '可嘗試：興趣受眾 → 類似受眾（LAL 1–3%）' });
   }
 
-  const ctr = clicks / (document.getElementById('impressions').value || 1) * 100;
-  if (ctr < 1) {
-    tips.push({
-      icon: '🎨',
-      title: 'CTR 低於 1%，廣告素材吸引力不足',
-      desc: '嘗試換用影片素材（CTR 通常比圖片高 2–3 倍），或在前 3 秒加入強烈視覺衝擊。',
-      impact: '目標：CTR 達到 1.5% 以上'
-    });
+  const ctr = clicks > 0 && impressions > 1 ? clicks / impressions * 100 : 0;
+  if (ctr > 0 && ctr < 1) {
+    tips.push({ icon: '🎨', title: 'CTR 低於 1%，廣告素材需要調整', desc: '嘗試換用影片或 Reels 素材（CTR 通常比圖片高 2–3 倍），或在前 3 秒加入產品展示畫面。', impact: '目標：CTR ≥ 1.5%' });
   }
 
   if (tips.length === 0) {
-    tips.push({
-      icon: '✅',
-      title: '數據看起來正常',
-      desc: '填入更多數據後可以獲得更精準的建議。也可以展開下方「教學」了解如何升級到電商模式。',
-      impact: ''
-    });
+    tips.push({ icon: '填入數據', title: '填入完整數據後顯示優化建議', desc: '請填入 Meta 後台數據與 Portaly 數據，系統會根據你的實際數字給出建議。', impact: '' });
   }
 
   document.getElementById('tips').innerHTML = tips.map(t => `
@@ -698,61 +623,24 @@ function renderTrafficTips(spend, clicks, lpviews, plyVisitors, plyClicks, plyCt
 
 function renderEcomTips(roas, clicks, lpviews, purchases, cvr, cpm, aov, profit, spend) {
   let tips = [];
-
-  if (roas < 2) {
-    tips.push({
-      icon: '🚨',
-      title: 'ROAS 低於 2x，廣告目前可能虧損',
-      desc: '建議暫停表現差的廣告組合，集中預算在 ROAS 最高的廣告上。同時提高 AOV（組合包、加購）。',
-      impact: '提高 AOV 10% = ROAS 直接提升 10%'
-    });
+  if (roas < 2 && roas > 0) {
+    tips.push({ icon: '🚨', title: 'ROAS 低於 2x，廣告目前可能虧損', desc: '建議暫停表現差的廣告組合，集中預算在 ROAS 最高的廣告上。同時提高 AOV（組合包、加購）。', impact: '提高 AOV 10% = ROAS 直接提升 10%' });
   }
-
-  if (cvr < 1 && lpviews > 0) {
-    tips.push({
-      icon: '🛒',
-      title: '著陸頁 CVR 低於 1%，商品頁需要優化',
-      desc: '確保：主圖吸睛、價格清晰、加入社會證明（評論/買家秀）、結帳按鈕在第一螢幕。',
-      impact: 'CVR 從 1% 提升到 2% = 購買量翻倍，ROAS 翻倍'
-    });
+  if (cvr < 1 && cvr > 0) {
+    tips.push({ icon: '🛒', title: '著陸頁 CVR 低於 1%，商品頁需要優化', desc: '確保：主圖吸睛、價格清晰、加入社會證明（評論/買家秀）、結帳按鈕在第一螢幕。', impact: 'CVR 從 1% 提升到 2% = 購買量翻倍' });
   }
-
-  if (cpm > 200) {
-    tips.push({
-      icon: '💰',
-      title: 'CPM 偏高（' + fmtNT(cpm,0) + '）',
-      desc: '嘗試 Reels 版位、擴大受眾、或改用「自動版位」讓 Meta 找最便宜的觸及。',
-      impact: '降低 CPM 30% = 相同預算多觸及 30% 用戶'
-    });
+  if (cpm > 200 && spend > 0) {
+    tips.push({ icon: '💰', title: 'CPM 偏高（' + fmtNT(cpm,0) + '）', desc: '嘗試 Reels 版位、擴大受眾、或改用「自動版位」讓 Meta 找最便宜的觸及。', impact: '降低 CPM 30% = 相同預算多觸及 30% 用戶' });
   }
-
   if (profit < 0 && purchases > 0) {
-    tips.push({
-      icon: '⚠️',
-      title: '目前淨利為負，確認成本率是否正確',
-      desc: '請確認商品成本率設定是否正確。若數據正確，代表廣告費用超過毛利，需提高客單價或降低 CPA。',
-      impact: '損益平衡 ROAS = 1 ÷ (1 − 成本率)'
-    });
+    tips.push({ icon: '⚠️', title: '目前淨利為負，確認成本率是否正確', desc: '若數據正確，代表廣告費用超過毛利，需提高客單價或降低 CPA。', impact: '損益平衡 ROAS = 1 ÷ (1 − 成本率)' });
   }
-
-  if (tips.length === 0 && roas >= 3) {
-    tips.push({
-      icon: '🚀',
-      title: 'ROAS 達標！可以考慮放大預算',
-      desc: '每次加預算幅度不超過 20–30%，讓演算法慢慢適應。避免一次大幅調整導致學習期重啟。',
-      impact: '放大方式：複製表現好的廣告組合並提高預算'
-    });
+  if (roas >= 3 && tips.length === 0) {
+    tips.push({ icon: '🚀', title: 'ROAS 達標！可以考慮放大預算', desc: '每次加預算幅度不超過 20–30%，讓演算法慢慢適應。', impact: '放大方式：複製表現好的廣告組合並提高預算' });
   }
-
   if (tips.length === 0) {
-    tips.push({
-      icon: '📊',
-      title: '持續監控這三個核心指標',
-      desc: 'CPM（受眾競爭）→ CTR（素材吸引力）→ CVR（商品頁說服力）。任一步驟掉分都會拉低 ROAS。',
-      impact: ''
-    });
+    tips.push({ icon: '📊', title: '填入完整數據後顯示優化建議', desc: 'CPM（受眾競爭）→ CTR（素材吸引力）→ CVR（商品頁說服力）。任一步驟掉分都會拉低 ROAS。', impact: '' });
   }
-
   document.getElementById('tips').innerHTML = tips.map(t => `
     <div class="tip">
       <div class="tip-icon">${t.icon}</div>
@@ -765,15 +653,64 @@ function renderEcomTips(roas, clicks, lpviews, purchases, cvr, cpm, aov, profit,
   `).join('');
 }
 
-function toggleGuide() {
-  const btn = document.getElementById('guideToggle');
-  const body = document.getElementById('guideBody');
-  btn.classList.toggle('open');
-  body.classList.toggle('show');
+function exportCSV() {
+  const dateStart = document.getElementById('dateStart').value || '';
+  const dateEnd = document.getElementById('dateEnd').value || '';
+  const spend = v('spend');
+  const impressions = v('impressions') || 0;
+  const reach = v('reach') || 0;
+  const clicks = v('clicks');
+  const lpviews = v('lpviews');
+
+  const cpm = spend > 0 && impressions > 0 ? (spend / impressions * 1000).toFixed(1) : '';
+  const cpc = clicks > 0 ? (spend / clicks).toFixed(1) : '';
+  const ctr = clicks > 0 && impressions > 0 ? (clicks / impressions * 100).toFixed(2) : '';
+  const freq = reach > 0 && impressions > 0 ? (impressions / reach).toFixed(2) : '';
+
+  let rows = [];
+  let headers = [];
+
+  if (currentMode === 'traffic') {
+    const plyVisitors = v('plyVisitors');
+    const plyClicks = v('plyClicks');
+    const plySales = v('plySales');
+    const plyRevenue = v('plyRevenue');
+    const plyCtr = plyVisitors > 0 ? (plyClicks / plyVisitors * 100).toFixed(1) : '';
+    const arrivalRate = lpviews > 0 && plyVisitors > 0 ? (plyVisitors / lpviews * 100).toFixed(1) : '';
+    const plyRoas = spend > 0 && plyRevenue > 0 ? (plyRevenue / spend).toFixed(2) : '';
+    const plyCpa = plySales > 0 && spend > 0 ? (spend / plySales).toFixed(0) : '';
+    const plyAov = plySales > 0 && plyRevenue > 0 ? (plyRevenue / plySales).toFixed(0) : '';
+    const plyCvr = plyVisitors > 0 && plySales > 0 ? (plySales / plyVisitors * 100).toFixed(2) : '';
+
+    headers = ['記錄開始日','記錄結束日','模式','花費(NT$)','曝光次數','觸及人數','連結點擊','著陸頁瀏覽','CPM','CPC','CTR(%)','Frequency','Portaly瀏覽人數','Portaly點擊','銷售量','總銷售額(NT$)','Portaly CTR(%)','到達率(%)','ROAS','CPA(NT$)','平均客單價(NT$)','訪客→購買CVR(%)'];
+    rows = [[dateStart, dateEnd, '引流模式(Portaly)', spend, impressions, reach, clicks, lpviews, cpm, cpc, ctr, freq, plyVisitors, plyClicks, plySales, plyRevenue, plyCtr, arrivalRate, plyRoas, plyCpa, plyAov, plyCvr]];
+  } else {
+    const purchases = v('purchases');
+    const revenue = v('revenue');
+    const cogsRate = v('cogs') / 100;
+    const roas = spend > 0 && revenue > 0 ? (revenue / spend).toFixed(2) : '';
+    const cpa = purchases > 0 ? (spend / purchases).toFixed(0) : '';
+    const aov = purchases > 0 ? (revenue / purchases).toFixed(0) : '';
+    const profit = revenue > 0 ? (revenue - spend - revenue * cogsRate).toFixed(0) : '';
+    const cvr = lpviews > 0 && purchases > 0 ? (purchases / lpviews * 100).toFixed(2) : '';
+
+    headers = ['記錄開始日','記錄結束日','模式','花費(NT$)','曝光次數','觸及人數','連結點擊','著陸頁瀏覽','CPM','CPC','CTR(%)','Frequency','購買次數','總營收(NT$)','成本率(%)','ROAS','CPA(NT$)','AOV(NT$)','CVR(%)','淨利潤(NT$)'];
+    rows = [[dateStart, dateEnd, '電商模式(直購)', spend, impressions, reach, clicks, lpviews, cpm, cpc, ctr, freq, purchases, revenue, v('cogs'), roas, cpa, aov, cvr, profit]];
+  }
+
+  const csvContent = '\uFEFF' + [headers, ...rows].map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `meta-ads-${dateStart || 'record'}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 // Init
 setMode('traffic');
+calc();
 </script>
 </body>
 </html>
